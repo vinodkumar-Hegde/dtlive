@@ -42,6 +42,7 @@ import {
 
 import LiveKitVideoStage from "./LiveKitVideoStage";
 import SessionSetupModal from "./SessionSetupModal";
+import SessionTimer from "./SessionTimer";
 import "./styles.css";
 import "./genz-classroom.css";
 
@@ -268,6 +269,11 @@ function MessageBubble({
 }
 
 function App() {
+  const [chatVisible, setChatVisible] = useState(true);
+  const [resourcesVisible, setResourcesVisible] = useState(
+    () => window.innerWidth > 960
+  );
+
   const [classSession, setClassSession] = useState(null);
   const [sessionSetupOpen, setSessionSetupOpen] = useState(false);
   const [sessionSaving, setSessionSaving] = useState(false);
@@ -627,8 +633,11 @@ function App() {
     <main className="med-classroom">
       <header className="med-topbar">
         <div className="med-brand">
-          <div className="med-brand-mark">
-            <Stethoscope size={22} />
+          <div className="med-brand-mark med-brand-logo">
+            <img
+              src="/doctutorials-logo.png"
+              alt="DocTutorials"
+            />
           </div>
 
           <div className="med-brand-copy">
@@ -663,6 +672,39 @@ function App() {
         </div>
 
         <div className="med-top-actions">
+          {!isFaculty && (
+            <div className="med-panel-toggles" aria-label="Classroom layout">
+              <button
+                type="button"
+                className={`med-layout-toggle ${
+                  resourcesVisible ? "active" : ""
+                }`}
+                onClick={() =>
+                  setResourcesVisible((current) => !current)
+                }
+                title={
+                  resourcesVisible
+                    ? "Hide class resources"
+                    : "Show class resources"
+                }
+              >
+                <Menu size={16} />
+                <span>Resources</span>
+              </button>
+
+              <button
+                type="button"
+                className={`med-layout-toggle ${
+                  chatVisible ? "active" : ""
+                }`}
+                onClick={() => setChatVisible((current) => !current)}
+                title={chatVisible ? "Hide class chat" : "Show class chat"}
+              >
+                <MessageCircle size={16} />
+                <span>Chat</span>
+              </button>
+            </div>
+          )}
           <span className="med-online">{onlineCount} online</span>
 
           <div className="med-profile-chip">
@@ -711,6 +753,12 @@ function App() {
           {sessionStatus === "live" && <Play size={11} />}
           {sessionStatus}
         </span>
+        <SessionTimer
+          status={sessionStatus}
+          startedAt={classSession?.started_at}
+          scheduledAt={classSession?.scheduled_at}
+          durationMinutes={classSession?.duration_minutes || 60}
+        />
 
         {isFaculty && (
           <button
@@ -725,9 +773,19 @@ function App() {
       </nav>
 
       <section
-        className="med-workspace"
+        className={`med-workspace ${
+          resourcesVisible ? "resources-visible" : "resources-hidden"
+        } ${chatVisible ? "chat-visible" : "chat-hidden"}`}
         data-mobile-view={mobileView}
       >
+        {!isFaculty && resourcesVisible && (
+          <button
+            type="button"
+            className="med-resource-scrim"
+            aria-label="Close class resources"
+            onClick={() => setResourcesVisible(false)}
+          />
+        )}
         <aside className="med-resource-rail">
           <header className="med-panel-header">
             <div className="med-panel-title">
@@ -1085,32 +1143,45 @@ function App() {
         </aside>
       </section>
 
+
+
       <nav className="med-mobile-nav">
         <button
           type="button"
-          className={mobileView === "class" ? "active" : ""}
-          onClick={() => setMobileView("class")}
-        >
-          <Video size={17} />
-          Class
-        </button>
-
-        <button
-          type="button"
-          className={mobileView === "chat" ? "active" : ""}
-          onClick={() => setMobileView("chat")}
+          className={!resourcesVisible && chatVisible ? "active" : ""}
+          onClick={() => {
+            setResourcesVisible(false);
+            setChatVisible(true);
+            setMobileView("class");
+          }}
         >
           <MessageCircle size={17} />
-          Chat
+          Live + Chat
         </button>
 
         <button
           type="button"
-          className={mobileView === "resources" ? "active" : ""}
-          onClick={() => setMobileView("resources")}
+          className={!resourcesVisible && !chatVisible ? "active" : ""}
+          onClick={() => {
+            setResourcesVisible(false);
+            setChatVisible(false);
+            setMobileView("class");
+          }}
         >
-          <BookOpen size={17} />
-          Workbooks
+          <Video size={17} />
+          Focus Video
+        </button>
+
+        <button
+          type="button"
+          className={resourcesVisible ? "active" : ""}
+          onClick={() => {
+            setResourcesVisible((current) => !current);
+            setMobileView("class");
+          }}
+        >
+          <Menu size={17} />
+          Resources
         </button>
       </nav>
 
