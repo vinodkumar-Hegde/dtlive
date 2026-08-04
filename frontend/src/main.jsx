@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Bell,
+  BellOff,
   BookOpen,
   CalendarDays,
   Check,
@@ -18,9 +19,12 @@ import {
   GraduationCap,
   Image,
   LogOut,
+  Maximize2,
   Menu,
   MessageCircle,
   MessageSquareText,
+  Minimize2,
+  MonitorPlay,
   MoreVertical,
   Paperclip,
   Pin,
@@ -80,6 +84,51 @@ function formatTime(value) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(value));
+}
+
+function playChatNotificationTone() {
+  try {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+    const startAt = context.currentTime;
+
+    [720, 920].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const toneStart = startAt + index * 0.11;
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(
+        frequency,
+        toneStart
+      );
+
+      gain.gain.setValueAtTime(0.0001, toneStart);
+      gain.gain.exponentialRampToValueAtTime(
+        0.075,
+        toneStart + 0.018
+      );
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        toneStart + 0.105
+      );
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(toneStart);
+      oscillator.stop(toneStart + 0.12);
+    });
+
+    window.setTimeout(() => {
+      context.close().catch(() => {});
+    }, 500);
+  } catch {
+    // Some mobile browsers require a prior user interaction.
+  }
 }
 
 function Login({ onLogin }) {
@@ -269,10 +318,19 @@ function MessageBubble({
 }
 
 function App() {
-  const [chatVisible, setChatVisible] = useState(true);
+  const [chatVisible, setChatVisible] = useState(
+    () => window.innerWidth > 1100
+  );
   const [resourcesVisible, setResourcesVisible] = useState(
     () => window.innerWidth > 960
   );
+  const [videoVisible, setVideoVisible] = useState(true);
+  const [mediaFocus, setMediaFocus] = useState(false);
+  const [chatMuted, setChatMuted] = useState(
+    () => localStorage.getItem("dt-chat-muted") === "true"
+  );
+  const [chatUnread, setChatUnread] = useState(0);
+  const [chatToast, setChatToast] = useState(null);
 
   const [classSession, setClassSession] = useState(null);
   const [sessionSetupOpen, setSessionSetupOpen] = useState(false);
@@ -298,6 +356,9 @@ function App() {
   const socketRef = useRef(null);
   const typingTimerRef = useRef(null);
   const messageEndRef = useRef(null);
+  const chatVisibleRef = useRef(chatVisible);
+  const chatMutedRef = useRef(chatMuted);
+  const chatToastTimerRef = useRef(null);
 
   const activeRoom = rooms.find((room) => room.id === activeRoomId);
   const pinnedMessage = useMemo(
@@ -375,6 +436,41 @@ function App() {
           }
           return [...current, incoming];
         });
+
+        if (
+          data.type === "message_created" &&
+          incoming.author.id !== session.user.id
+        ) {
+          const shouldNotify =
+            !chatVisibleRef.current ||
+            document.visibilityState !== "visible";
+
+          if (shouldNotify) {
+            setChatUnread((current) => current + 1);
+            setChatToast({
+              id: incoming.id,
+              author: incoming.author.name,
+              body: incoming.body,
+            });
+
+            if (!chatMutedRef.current) {
+              playChatNotificationTone();
+
+              if (navigator.vibrate) {
+                navigator.vibrate(60);
+              }
+            }
+
+            window.clearTimeout(
+              chatToastTimerRef.current
+            );
+
+            chatToastTimerRef.current =
+              window.setTimeout(() => {
+                setChatToast(null);
+              }, 4800);
+          }
+        }
       }
 
       if (data.type === "presence") {
@@ -414,6 +510,29 @@ function App() {
       .then(setClassSession)
       .catch((err) => setError(err.message));
   }, [activeRoomId, session]);
+
+  useEffect(() => {
+    chatVisibleRef.current = chatVisible;
+
+    if (chatVisible && document.visibilityState === "visible") {
+      setChatUnread(0);
+      setChatToast(null);
+    }
+  }, [chatVisible]);
+
+  useEffect(() => {
+    chatMutedRef.current = chatMuted;
+    localStorage.setItem(
+      "dt-chat-muted",
+      String(chatMuted)
+    );
+  }, [chatMuted]);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(chatToastTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -630,7 +749,11 @@ function App() {
     : "Schedule not added";
 
   return (
-    <main className="med-classroom">
+    <main
+      className={`med-classroom ${
+        mediaFocus ? "media-focus" : ""
+      }`}
+    >
       <header className="med-topbar">
         <div className="med-brand">
           <div className="med-brand-mark med-brand-logo">
@@ -673,7 +796,10 @@ function App() {
 
         <div className="med-top-actions">
           {!isFaculty && (
-            <div className="med-panel-toggles" aria-label="Classroom layout">
+            <div
+              className="med-panel-toggles"
+              aria-label="Classroom layout"
+            >
               <button
                 type="button"
                 className={`med-layout-toggle ${
@@ -695,13 +821,76 @@ function App() {
               <button
                 type="button"
                 className={`med-layout-toggle ${
+                  videoVisible ? "active" : ""
+                }`}
+                onClick={() => {
+                  if (videoVisible && !chatVisible) {
+                    setChatVisible(true);
+                  }
+
+                  setVideoVisible((current) => !current);
+                  setMediaFocus(false);
+                }}
+                title={
+                  videoVisible
+                    ? "Hide Faculty video"
+                    : "Show Faculty video"
+                }
+              >
+                <MonitorPlay size={16} />
+                <span>Video</span>
+              </button>
+
+              <button
+                type="button"
+                className={`med-layout-toggle ${
                   chatVisible ? "active" : ""
                 }`}
-                onClick={() => setChatVisible((current) => !current)}
-                title={chatVisible ? "Hide class chat" : "Show class chat"}
+                onClick={() => {
+                  if (chatVisible && !videoVisible) {
+                    setVideoVisible(true);
+                  }
+
+                  setChatVisible((current) => !current);
+                }}
+                title={
+                  chatVisible
+                    ? "Hide class chat"
+                    : "Show class chat"
+                }
               >
                 <MessageCircle size={16} />
                 <span>Chat</span>
+
+                {chatUnread > 0 && (
+                  <b className="med-toggle-unread">
+                    {Math.min(chatUnread, 99)}
+                  </b>
+                )}
+              </button>
+
+              <button
+                type="button"
+                className={`med-layout-toggle ${
+                  chatMuted ? "muted" : ""
+                }`}
+                onClick={() =>
+                  setChatMuted((current) => !current)
+                }
+                title={
+                  chatMuted
+                    ? "Unmute chat alerts"
+                    : "Mute chat alerts"
+                }
+              >
+                {chatMuted ? (
+                  <BellOff size={16} />
+                ) : (
+                  <Bell size={16} />
+                )}
+                <span>
+                  {chatMuted ? "Unmute" : "Mute"}
+                </span>
               </button>
             </div>
           )}
@@ -775,7 +964,9 @@ function App() {
       <section
         className={`med-workspace ${
           resourcesVisible ? "resources-visible" : "resources-hidden"
-        } ${chatVisible ? "chat-visible" : "chat-hidden"}`}
+        } ${chatVisible ? "chat-visible" : "chat-hidden"} ${
+          videoVisible ? "video-visible" : "video-hidden"
+        }`}
         data-mobile-view={mobileView}
       >
         {!isFaculty && resourcesVisible && (
@@ -924,7 +1115,8 @@ function App() {
           <div className="med-stage-context">
             <div>
               <strong>
-                {classSession?.topic || "Faculty broadcast stage"}
+                {classSession?.topic ||
+                  "Faculty broadcast stage"}
               </strong>
               <span>
                 {isFaculty
@@ -933,12 +1125,43 @@ function App() {
               </span>
             </div>
 
-            <span className="med-stage-badge">
-              <Video size={13} />
-              {isFaculty ? "Faculty broadcast" : "Watch only"}
-            </span>
-          </div>
+            <div className="med-stage-actions">
+              <span className="med-stage-badge">
+                <Video size={13} />
+                {isFaculty
+                  ? "Faculty broadcast"
+                  : "Watch only"}
+              </span>
 
+              {!isFaculty && (
+                <button
+                  type="button"
+                  className="med-focus-toggle"
+                  onClick={() => {
+                    const nextFocus = !mediaFocus;
+                    setMediaFocus(nextFocus);
+                    setVideoVisible(true);
+
+                    if (nextFocus) {
+                      setChatVisible(false);
+                      setResourcesVisible(false);
+                    }
+                  }}
+                  title={
+                    mediaFocus
+                      ? "Exit full-screen classroom"
+                      : "Open full-screen classroom"
+                  }
+                >
+                  {mediaFocus ? (
+                    <Minimize2 size={15} />
+                  ) : (
+                    <Maximize2 size={15} />
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
           {isFaculty && sessionConfigured && sessionStatus !== "live" ? (
             <div className="med-session-empty">
               <div className="med-session-empty-icon">
@@ -1003,24 +1226,63 @@ function App() {
               <div className="med-chat-title-icon">
                 <MessageCircle size={17} />
               </div>
+
               <div>
-                <strong>Class chat</strong>
+                <strong>
+                  Class chat
+                  {chatUnread > 0 && (
+                    <b className="med-chat-unread">
+                      {Math.min(chatUnread, 99)}
+                    </b>
+                  )}
+                </strong>
+
                 <span>
                   {typingNames.length
                     ? `${typingNames.join(", ")} typing`
-                    : "Ask, discuss and respond"}
+                    : chatMuted
+                      ? "Chat alerts muted"
+                      : "Ask, discuss and respond"}
                 </span>
               </div>
             </div>
 
-            <form className="med-chat-search" onSubmit={search}>
-              <Search size={17} />
-              <input
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search"
-              />
-            </form>
+            <div className="med-chat-header-actions">
+              <button
+                type="button"
+                className={`med-chat-mute ${
+                  chatMuted ? "muted" : ""
+                }`}
+                onClick={() =>
+                  setChatMuted((current) => !current)
+                }
+                title={
+                  chatMuted
+                    ? "Unmute chat alerts"
+                    : "Mute chat alerts"
+                }
+              >
+                {chatMuted ? (
+                  <BellOff size={16} />
+                ) : (
+                  <Bell size={16} />
+                )}
+              </button>
+
+              <form
+                className="med-chat-search"
+                onSubmit={search}
+              >
+                <Search size={17} />
+                <input
+                  value={searchTerm}
+                  onChange={(event) =>
+                    setSearchTerm(event.target.value)
+                  }
+                  placeholder="Search"
+                />
+              </form>
+            </div>
           </header>
 
           {pinnedMessage && (
@@ -1145,31 +1407,74 @@ function App() {
 
 
 
+
       <nav className="med-mobile-nav">
         <button
           type="button"
-          className={!resourcesVisible && chatVisible ? "active" : ""}
+          className={
+            videoVisible &&
+            !chatVisible &&
+            !resourcesVisible
+              ? "active"
+              : ""
+          }
           onClick={() => {
             setResourcesVisible(false);
-            setChatVisible(true);
-            setMobileView("class");
+            setVideoVisible(true);
+            setChatVisible(false);
+            setMediaFocus(false);
           }}
         >
-          <MessageCircle size={17} />
-          Live + Chat
+          <MonitorPlay size={17} />
+          Live
         </button>
 
         <button
           type="button"
-          className={!resourcesVisible && !chatVisible ? "active" : ""}
+          className={
+            videoVisible &&
+            chatVisible &&
+            !resourcesVisible
+              ? "active"
+              : ""
+          }
           onClick={() => {
             setResourcesVisible(false);
-            setChatVisible(false);
-            setMobileView("class");
+            setVideoVisible(true);
+            setChatVisible(true);
+            setMediaFocus(false);
+            setChatUnread(0);
           }}
         >
           <Video size={17} />
-          Focus Video
+          Split
+        </button>
+
+        <button
+          type="button"
+          className={
+            !videoVisible &&
+            chatVisible &&
+            !resourcesVisible
+              ? "active"
+              : ""
+          }
+          onClick={() => {
+            setResourcesVisible(false);
+            setVideoVisible(false);
+            setChatVisible(true);
+            setMediaFocus(false);
+            setChatUnread(0);
+          }}
+        >
+          <MessageCircle size={17} />
+          Chat
+
+          {chatUnread > 0 && (
+            <b className="med-mobile-unread">
+              {Math.min(chatUnread, 99)}
+            </b>
+          )}
         </button>
 
         <button
@@ -1177,13 +1482,44 @@ function App() {
           className={resourcesVisible ? "active" : ""}
           onClick={() => {
             setResourcesVisible((current) => !current);
-            setMobileView("class");
+            setMediaFocus(false);
           }}
         >
           <Menu size={17} />
           Resources
         </button>
       </nav>
+
+      {chatToast && !chatVisible && (
+        <button
+          type="button"
+          className="zoom-chat-toast"
+          onClick={() => {
+            setVideoVisible(
+              window.innerWidth > 960
+            );
+            setChatVisible(true);
+            setResourcesVisible(false);
+            setMediaFocus(false);
+            setChatUnread(0);
+            setChatToast(null);
+          }}
+        >
+          <div className="zoom-chat-toast-icon">
+            <MessageCircle size={18} />
+          </div>
+
+          <div className="zoom-chat-toast-copy">
+            <span>New chat message</span>
+            <strong>{chatToast.author}</strong>
+            <p>{chatToast.body}</p>
+          </div>
+
+          {chatUnread > 0 && (
+            <b>{Math.min(chatUnread, 99)}</b>
+          )}
+        </button>
+      )}
 
       <SessionSetupModal
         open={sessionSetupOpen}
