@@ -1,0 +1,83 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dt_live_chat_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "55436:5432"
+    volumes:
+      - dt_live_chat_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: dt_live_chat_redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - dt_live_chat_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: dt_live_chat_livekit
+    restart: unless-stopped
+    command:
+      - --config
+      - /etc/livekit.yaml
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    ports:
+      - "${LIVEKIT_SIGNAL_PORT}:7880"
+      - "${LIVEKIT_UDP_PORT}:${LIVEKIT_UDP_PORT}/udp"
+      - "${LIVEKIT_TCP_PORT}:${LIVEKIT_TCP_PORT}"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  backend:
+    build: ./backend
+    container_name: dt_live_chat_backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8092:8092"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8092 --reload
+
+  frontend:
+    build: ./frontend
+    container_name: dt_live_chat_frontend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "5192:5192"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0 --port 5192
+
+volumes:
+  dt_live_chat_pgdata:
+  dt_live_chat_redisdata:

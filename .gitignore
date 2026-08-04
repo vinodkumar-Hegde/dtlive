@@ -1,0 +1,74 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+secrets/
+credentials/
+aws-credentials*
+service-account*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node / Vite
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.vite/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Databases and runtime data
+*.db
+*.sqlite
+*.sqlite3
+postgres-data/
+redis-data/
+data/
+storage/
+uploads/
+recordings/
+
+# Docker/runtime
+docker-compose.override.yml
+*.pid
+*.sock
+
+# Local development and diagnostics
+diagnostics/
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.tmp
+*.swp
+*~
+Screenshot*.png
+
+# LiveKit generated/local certificates
+certs/
+livekit-certs/
+turn-certs/
+
+# Archives and installers
+*.zip
+*.tar
+*.tar.gz
+*.dmg
+*.apk

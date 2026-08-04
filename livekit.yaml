@@ -1,0 +1,19 @@
+port: 7880
+
+bind_addresses:
+  - "0.0.0.0"
+
+rtc:
+  node_ip: 172.18.25.71
+  use_external_ip: false
+  udp_port: 17901
+  tcp_port: 17902
+
+keys:
+  devkey: secret
+
+room:
+  auto_create: true
+
+logging:
+  level: info

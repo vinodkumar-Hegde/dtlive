@@ -1,0 +1,9 @@
+fastapi>=0.115,<1
+uvicorn[standard]>=0.30,<1
+sqlalchemy>=2,<3
+psycopg[binary]>=3.2,<4
+redis>=5,<7
+pydantic-settings>=2,<3
+PyJWT>=2.9,<3
+python-multipart>=0.0.9
+livekit-api==1.2.0
