@@ -1,0 +1,691 @@
+/* Clean DocTutorials media stage — replaces accumulated video patches */
+
+.med-stage-column > .dtm-panel {
+  position: relative;
+  z-index: 10;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+  background: #eef3f7;
+}
+
+.dtm-panel {
+  width: 100%;
+  height: 100%;
+  color: #17344c;
+}
+
+.dtm-entry {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: clamp(24px, 5vw, 64px);
+  background:
+    radial-gradient(
+      circle at 10% 12%,
+      rgba(38, 132, 214, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #f8fbfd, #e7f0f7);
+}
+
+.dtm-entry-icon {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #bcd4e8;
+  border-radius: 22px;
+  color: #176ea9;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 34px rgba(36, 83, 116, 0.14);
+}
+
+.dtm-entry-copy {
+  min-width: 0;
+}
+
+.dtm-entry-copy > span {
+  color: #1473b8;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 1.2px;
+}
+
+.dtm-entry-copy h2 {
+  margin: 8px 0 7px;
+  color: #18364f;
+  font-size: clamp(20px, 2.1vw, 30px);
+  line-height: 1.15;
+}
+
+.dtm-entry-copy p {
+  max-width: 660px;
+  margin: 0;
+  color: #61798c;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dtm-join {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 14px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1378d2, #0da9cf);
+  box-shadow: 0 14px 28px rgba(13, 125, 190, 0.24);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.dtm-join:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+.dtm-livekit-host,
+.dtm-livekit-host > .lk-room-container,
+.dtm-livekit-host .lk-room-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.dtm-livekit-host {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.dtm-livekit-host .lk-room-container {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+.dtm-shell {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #eef3f7;
+}
+
+.dtm-status {
+  min-height: 42px;
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #d5e1ea;
+  color: #5c7182;
+  background: rgba(255, 255, 255, 0.96);
+  font-size: 11px;
+}
+
+.dtm-status span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dtm-live {
+  margin-right: auto;
+  color: #c8294c !important;
+  font-weight: 850;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.dtm-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, #edf3f7, #dfe9f1);
+}
+
+.dtm-primary {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0f1d2a;
+}
+
+.dtm-track,
+.dtm-track > div,
+.dtm-track .lk-video-track,
+.dtm-track video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.dtm-primary.is-camera video {
+  object-fit: cover !important;
+  object-position: center center !important;
+  background: #0f1d2a !important;
+}
+
+.dtm-primary.is-screen video {
+  object-position: center center !important;
+  background: #ffffff !important;
+}
+
+.dtm-primary.is-screen.fit-contain video {
+  object-fit: contain !important;
+}
+
+.dtm-primary.is-screen.fit-cover video {
+  object-fit: cover !important;
+}
+
+.dtm-presenter-tag {
+  position: absolute;
+  z-index: 30;
+  top: 12px;
+  left: 12px;
+  max-width: min(72%, 430px);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 9px 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  color: #163850;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 28px rgba(24, 58, 82, 0.2);
+  backdrop-filter: blur(14px);
+}
+
+.dtm-presenter-tag > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.dtm-presenter-tag b {
+  overflow: hidden;
+  color: #173850;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dtm-presenter-tag span {
+  color: #6b8192;
+  font-size: 9px;
+}
+
+.dtm-presenter-tag button {
+  min-height: 30px;
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid #b9d2e4;
+  border-radius: 8px;
+  color: #146699;
+  background: #edf7fd;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.dtm-faculty-pip {
+  position: absolute;
+  z-index: 36;
+  width: clamp(190px, 20vw, 270px);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow:
+    0 22px 50px rgba(20, 50, 72, 0.28),
+    0 0 0 1px rgba(28, 112, 176, 0.1);
+}
+
+.dtm-faculty-pip-bar {
+  min-height: 34px;
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 7px 6px 10px;
+  border-bottom: 1px solid #d9e5ed;
+  color: #14689d;
+  background: linear-gradient(90deg, #eaf5fc, #f9fcfe);
+  cursor: grab;
+  user-select: none;
+}
+
+.dtm-faculty-pip-bar:active {
+  cursor: grabbing;
+}
+
+.dtm-faculty-pip-bar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+}
+
+.dtm-faculty-pip-bar button {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cfe0eb;
+  border-radius: 8px;
+  color: #567086;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.dtm-faculty-pip-media {
+  position: relative;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  background: #dfe9f0;
+}
+
+.dtm-faculty-pip-media > div,
+.dtm-faculty-pip-media .lk-video-track,
+.dtm-faculty-pip-media video {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.dtm-faculty-pip-media video {
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+.dtm-faculty-name {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 10px;
+  color: #173850;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow: 0 8px 20px rgba(19, 50, 72, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.dtm-faculty-name b {
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #1478ca;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+}
+
+.dtm-faculty-name span {
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dtm-show-faculty {
+  position: absolute;
+  z-index: 38;
+  top: 14px;
+  right: 14px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid #bfd4e4;
+  border-radius: 10px;
+  color: #176999;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 24px rgba(26, 61, 86, 0.15);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.dtm-waiting {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 9px;
+  padding: 24px;
+  text-align: center;
+  color: #5f7587;
+}
+
+.dtm-waiting > div {
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #c2d5e4;
+  border-radius: 22px;
+  color: #1b75ad;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(36, 78, 107, 0.12);
+}
+
+.dtm-waiting strong {
+  color: #24445b;
+  font-size: 18px;
+}
+
+.dtm-waiting span {
+  max-width: 520px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dtm-control-region {
+  position: relative;
+  z-index: 50;
+  min-height: 68px;
+  flex: 0 0 68px;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-top: 1px solid #d2dfe8;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 -8px 24px rgba(35, 73, 99, 0.08);
+}
+
+.dtm-control-bar {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.dtm-control-bar button {
+  min-width: 108px;
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border: 1px solid #cbdbe7;
+  border-radius: 12px;
+  color: #24465f;
+  background: #f8fbfd;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.dtm-control-bar button:hover {
+  border-color: #8ab8d8;
+  color: #0f6da8;
+  background: #eaf5fc;
+}
+
+.dtm-control-bar button.is-off {
+  border-color: #efc4cc;
+  color: #a33348;
+  background: #fff2f4;
+}
+
+.dtm-control-bar button.is-sharing {
+  border-color: #9bcbb9;
+  color: #177552;
+  background: #edf9f3;
+}
+
+.dtm-control-bar button.dtm-leave-media {
+  border-color: #d94c64;
+  color: #ffffff;
+  background: #c93750;
+}
+
+.dtm-control-bar button:disabled {
+  cursor: wait;
+  opacity: 0.56;
+}
+
+.dtm-control-error {
+  position: absolute;
+  right: 10px;
+  bottom: calc(100% + 8px);
+  max-width: min(440px, calc(100% - 20px));
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid #efc6cd;
+  border-radius: 10px;
+  color: #8f3545;
+  background: #fff7f8;
+  box-shadow: 0 10px 24px rgba(92, 42, 52, 0.12);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.dtm-student-controls {
+  min-height: 58px;
+  flex: 0 0 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border-top: 1px solid #d2dfe8;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.dtm-student-controls > span,
+.dtm-student-controls button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.dtm-student-controls > span {
+  color: #3d6179;
+  background: #eef5f9;
+}
+
+.dtm-student-controls button {
+  border: 1px solid #d3dfe8;
+  color: #6b4050;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.dtm-error {
+  position: absolute;
+  z-index: 80;
+  right: 12px;
+  bottom: 82px;
+  left: 12px;
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid #efc2ca;
+  border-radius: 11px;
+  color: #8f3445;
+  background: rgba(255, 247, 248, 0.97);
+  box-shadow: 0 12px 28px rgba(93, 39, 50, 0.15);
+  font-size: 10px;
+}
+
+.dtm-room-label {
+  position: absolute;
+  z-index: 20;
+  top: 10px;
+  right: 12px;
+  max-width: 38%;
+  overflow: hidden;
+  color: transparent;
+  font-size: 1px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.dtm-livekit-host .lk-start-audio-button {
+  position: absolute !important;
+  z-index: 70 !important;
+  left: 50% !important;
+  bottom: 82px !important;
+  transform: translateX(-50%) !important;
+}
+
+.med-stage-column > .med-end-session {
+  position: absolute !important;
+  z-index: 120 !important;
+  top: 11px !important;
+  right: 154px !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
+  min-width: 112px !important;
+  max-width: max-content !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  padding: 6px 10px !important;
+  border: 1px solid #d64a61 !important;
+  border-radius: 9px !important;
+  color: #ffffff !important;
+  background: #c93750 !important;
+  box-shadow: 0 8px 18px rgba(140, 44, 61, 0.2) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 900px) {
+  .dtm-status span:last-child {
+    display: none;
+  }
+
+  .dtm-entry {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+
+  .dtm-join {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .dtm-faculty-pip {
+    width: clamp(150px, 27vw, 210px);
+  }
+
+  .dtm-control-bar {
+    justify-content: flex-start;
+  }
+
+  .dtm-control-bar button {
+    min-width: 96px;
+  }
+}
+
+@media (max-width: 620px) {
+  .dtm-entry {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 15px;
+    padding: 24px 18px;
+    text-align: center;
+  }
+
+  .dtm-join {
+    grid-column: auto;
+    justify-self: center;
+  }
+
+  .dtm-status {
+    gap: 9px;
+    padding-inline: 9px;
+  }
+
+  .dtm-status span:nth-child(2) {
+    margin-left: auto;
+  }
+
+  .dtm-control-region {
+    min-height: 62px;
+    flex-basis: 62px;
+    padding: 7px;
+  }
+
+  .dtm-control-bar button {
+    min-width: 46px;
+    width: 46px;
+    padding: 8px;
+  }
+
+  .dtm-control-bar button span {
+    display: none;
+  }
+
+  .dtm-faculty-pip {
+    width: clamp(126px, 34vw, 170px);
+  }
+
+  .dtm-presenter-tag {
+    top: 8px;
+    left: 8px;
+    max-width: calc(100% - 16px);
+  }
+
+  .med-stage-column > .med-end-session {
+    top: 58px !important;
+    right: 8px !important;
+  }
+}

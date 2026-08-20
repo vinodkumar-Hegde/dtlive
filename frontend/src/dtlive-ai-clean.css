@@ -1,0 +1,599 @@
+/* Clean private AI Tutor — unique classes avoid previous chat patches */
+
+.med-chat-column:has(> .dtai2-root) {
+  position: relative !important;
+  padding-top: 56px !important;
+}
+
+.dtai2-root {
+  display: contents;
+}
+
+.dtai2-tabs {
+  position: absolute;
+  z-index: 210;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  padding: 7px;
+  border-bottom: 1px solid #d8e4ed;
+  background: rgba(248, 251, 254, 0.98);
+  backdrop-filter: blur(18px);
+}
+
+.dtai2-tabs button {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #5f7486;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+  transition:
+    transform 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.dtai2-tabs button:hover {
+  transform: translateY(-1px);
+  color: #23516f;
+  background: #edf5fa;
+}
+
+.dtai2-tabs button.active {
+  border-color: #c4d8e7;
+  color: #174f78;
+  background: #ffffff;
+  box-shadow: 0 7px 17px rgba(34, 75, 104, 0.1);
+}
+
+.dtai2-tabs button.active.ai {
+  border-color: #bdc7ef;
+  color: #4d4aa2;
+  background: linear-gradient(135deg, #f7f6ff, #eef0ff);
+}
+
+.dtai2-tabs i {
+  padding: 2px 5px;
+  border-radius: 999px;
+  color: #5855a9;
+  background: #e8e7ff;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.dtai2-panel {
+  position: absolute;
+  z-index: 200;
+  inset: 56px 0 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #20394d;
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(111, 119, 226, 0.13),
+      transparent 34%
+    ),
+    linear-gradient(180deg, #fbfdff, #f3f7fb);
+}
+
+.dtai2-header {
+  min-height: 64px;
+  flex: 0 0 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dce6ee;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.dtai2-header > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dtai2-header > div > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.dtai2-header strong {
+  overflow: hidden;
+  color: #203d53;
+  font-size: 13px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dtai2-header small {
+  color: #718597;
+  font-size: 10px;
+}
+
+.dtai2-logo {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(145deg, #6266d6, #4652b6);
+  box-shadow: 0 9px 20px rgba(71, 81, 181, 0.23);
+}
+
+.dtai2-clear {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d5e1ea;
+  border-radius: 10px;
+  color: #647a8b;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.dtai2-clear:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.dtai2-private {
+  min-height: 34px;
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #d5e9df;
+  color: #456f5e;
+  background: #edf8f3;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.dtai2-quality {
+  min-height: 42px;
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-bottom: 1px solid #e0e8ef;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.dtai2-quality button {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border: 1px solid #d6e1e9;
+  border-radius: 9px;
+  color: #667b8d;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.dtai2-quality button.active {
+  border-color: #aeb9e7;
+  color: #4d49a1;
+  background: #eceeff;
+}
+
+.dtai2-list {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 13px 11px 22px;
+}
+
+.dtai2-empty {
+  width: min(94%, 330px);
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  align-self: center;
+  margin: auto;
+  padding: 20px 16px;
+  border: 1px solid #dbe5ee;
+  border-radius: 18px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 15px 36px rgba(41, 76, 101, 0.1);
+}
+
+.dtai2-empty > span {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: #585cc2;
+  background: #ececff;
+}
+
+.dtai2-empty strong {
+  color: #28445a;
+  font-size: 14px;
+}
+
+.dtai2-empty p {
+  margin: 0;
+  color: #6c8192;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.dtai2-message {
+  width: min(96%, 390px);
+  display: grid;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 12px 13px;
+  border: 1px solid #dbe5ed;
+  border-radius: 16px 16px 16px 6px;
+  color: #294257;
+  background: #ffffff;
+  box-shadow: 0 9px 22px rgba(37, 73, 98, 0.08);
+}
+
+.dtai2-message.user {
+  width: auto;
+  max-width: 88%;
+  align-self: flex-end;
+  border-color: #c3d7e8;
+  border-radius: 16px 16px 6px 16px;
+  color: #ffffff;
+  background: linear-gradient(145deg, #336f9e, #285e89);
+}
+
+.dtai2-message.error {
+  border-color: #efc7cd;
+  color: #7e3541;
+  background: #fff7f8;
+}
+
+.dtai2-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #595eb4;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.dtai2-message.user .dtai2-author {
+  color: #dcecf9;
+}
+
+.dtai2-copy {
+  color: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.dtai2-answer {
+  display: grid;
+  gap: 9px;
+  white-space: normal;
+}
+
+.dtai2-answer p,
+.dtai2-answer h4 {
+  margin: 0;
+}
+
+.dtai2-answer p {
+  color: #294358;
+  font-size: 12px;
+  line-height: 1.62;
+}
+
+.dtai2-answer h4 {
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e0e9f0;
+  color: #203b52;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.dtai2-answer strong {
+  color: #173d5b;
+  font-weight: 850;
+}
+
+.dtai2-answer code {
+  padding: 1px 4px;
+  border-radius: 5px;
+  color: #4d4a9e;
+  background: #edeeff;
+  font-size: 11px;
+}
+
+.dtai2-space {
+  height: 2px;
+}
+
+.dtai2-bullet {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  color: #294358;
+  font-size: 12px;
+  line-height: 1.58;
+}
+
+.dtai2-bullet > i {
+  width: 7px;
+  height: 7px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6669d8, #3f8cc3);
+  box-shadow: 0 0 0 3px rgba(91, 101, 205, 0.1);
+}
+
+.dtai2-number {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  color: #294358;
+  font-size: 12px;
+  line-height: 1.58;
+}
+
+.dtai2-number > b {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: #ffffff;
+  background: #5962c8;
+  font-size: 9px;
+}
+
+.dtai2-callout {
+  display: grid;
+  gap: 4px;
+  padding: 9px 10px;
+  border: 1px solid #d8e4ed;
+  border-left: 3px solid #5d67cf;
+  border-radius: 10px;
+  color: #294358;
+  background: #f7f9ff;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.dtai2-callout.is-direct {
+  border-left-color: #1880bd;
+  background: #eff8fd;
+}
+
+.dtai2-callout > strong {
+  color: #4c54aa;
+  font-size: 9px;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.dtai2-callout.is-direct > strong {
+  color: #176b9c;
+}
+
+.dtai2-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #6b7e90;
+  font-size: 11px;
+}
+
+.dtai2-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 3px;
+  border-radius: 2px;
+  vertical-align: -2px;
+  background: #5b60c6;
+  animation: dtai2Blink 0.8s steps(1) infinite;
+}
+
+@keyframes dtai2Blink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.dtai2-spin {
+  animation: dtai2Spin 0.85s linear infinite;
+}
+
+@keyframes dtai2Spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dtai2-error-detail {
+  font-size: 10px;
+}
+
+.dtai2-error-detail summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.dtai2-error-detail code {
+  display: block;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+  color: #8d3545;
+  font-size: 9px;
+  white-space: pre-wrap;
+}
+
+.dtai2-source {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 8px 9px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.dtai2-source.workbook {
+  color: #246149;
+  background: #eaf8f1;
+}
+
+.dtai2-source.general_model {
+  color: #705d32;
+  background: #fbf3df;
+}
+
+.dtai2-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #e6edf2;
+  color: #718596;
+  font-size: 9px;
+}
+
+.dtai2-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dtai2-composer {
+  min-height: 76px;
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  align-items: end;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid #dce5ed;
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.dtai2-composer textarea {
+  width: 100%;
+  min-height: 48px;
+  max-height: 128px;
+  resize: none;
+  padding: 10px 11px;
+  border: 1px solid #cddce7;
+  border-radius: 13px;
+  outline: none;
+  color: #263f52;
+  background: #f9fbfd;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.dtai2-composer textarea:focus {
+  border-color: #909fdf;
+  box-shadow: 0 0 0 3px rgba(104, 113, 207, 0.12);
+}
+
+.dtai2-composer button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 13px;
+  color: #ffffff;
+  background: linear-gradient(145deg, #6064d4, #4652b7);
+  box-shadow: 0 9px 19px rgba(70, 82, 183, 0.22);
+  cursor: pointer;
+}
+
+.dtai2-composer button:disabled {
+  cursor: default;
+  opacity: 0.44;
+  box-shadow: none;
+}
+
+@media (max-width: 680px) {
+  .med-chat-column:has(> .dtai2-root) {
+    padding-top: 50px !important;
+  }
+
+  .dtai2-tabs {
+    height: 50px;
+    padding: 6px;
+  }
+
+  .dtai2-panel {
+    inset: 50px 0 0;
+  }
+
+  .dtai2-message {
+    width: 96%;
+  }
+
+  .dtai2-answer p,
+  .dtai2-bullet,
+  .dtai2-number,
+  .dtai2-callout {
+    font-size: 11px;
+  }
+}

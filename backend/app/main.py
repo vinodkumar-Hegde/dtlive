@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 import json
 
 import uuid
@@ -15,9 +17,16 @@ from sqlalchemy.orm import Session, joinedload, selectinload
 from livekit import api as livekit_api
 
 from . import models, schemas
+from .ai_stream_router import router as ai_stream_router
+from .ai_clarification import (
+    is_academic_question,
+    router as academic_ai_router,
+    schedule_student_ai_clarification,
+)
 from .auth import create_access_token, get_current_user, get_ws_user, require_moderator
 from .config import settings
 from .db import Base, SessionLocal, engine, get_db
+from .workbook_router import router as workbook_router
 from .realtime import (
     enforce_slow_mode,
     manager,
@@ -167,10 +176,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="DocTutorials Live Chat API", lifespan=lifespan)
+app.include_router(workbook_router)
+app.include_router(ai_stream_router)
+app.include_router(academic_ai_router)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -505,6 +518,7 @@ async def create_message(
     message = db.scalar(message_query().where(models.Message.id == message.id))
     event = {"type": "message_created", "message": serialize_message(message)}
     await publish(room_id, event)
+
     return event["message"]
 
 

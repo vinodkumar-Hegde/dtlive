@@ -1,0 +1,310 @@
+/* UPDATE 020 STABLE MEDIA STAGE */
+
+.dt20-room,
+.dt20-room > div,
+.dt20-room .lk-room-container {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.dt20-shell {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: min(76vh, 790px) !important;
+  min-height: 500px !important;
+  display: grid !important;
+  grid-template-rows:
+    auto minmax(0, 1fr) auto !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  color: #eef6ff !important;
+  background: #06111f !important;
+}
+
+.dt20-status {
+  min-height: 48px !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 18px !important;
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #b9c8da !important;
+  background: #0b1728 !important;
+  font-size: 12px !important;
+}
+
+.dt20-status span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  white-space: nowrap !important;
+}
+
+.dt20-status .dt20-live {
+  margin-right: auto !important;
+  color: #ffb4c2 !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+}
+
+.dt20-stage {
+  position: relative !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #02070d !important;
+}
+
+.dt20-split-layout {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 10px !important;
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 1fr)
+    clamp(250px, 24vw, 360px) !important;
+  gap: 10px !important;
+}
+
+.dt20-presentation-panel,
+.dt20-faculty-panel,
+.dt20-camera-stage {
+  position: relative !important;
+  inset: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  transform: none !important;
+  border:
+    1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 13px !important;
+  background: #000 !important;
+  box-shadow: none !important;
+}
+
+.dt20-camera-stage {
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.dt20-track-frame {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background: #000 !important;
+}
+
+.dt20-track-frame,
+.dt20-track-frame > div,
+.dt20-track-frame .lk-participant-media-video,
+.dt20-track-frame video {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  background: #000 !important;
+}
+
+.dt20-screen-frame video {
+  object-fit: contain !important;
+}
+
+.dt20-camera-frame video {
+  object-fit: cover !important;
+}
+
+.dt20-caption {
+  position: absolute !important;
+  z-index: 4 !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  min-height: 42px !important;
+  padding: 7px 10px !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 2px !important;
+  border-radius: 9px !important;
+  color: #fff !important;
+  background: rgba(4, 12, 23, 0.78) !important;
+  backdrop-filter: blur(10px) !important;
+  pointer-events: none !important;
+}
+
+.dt20-caption strong {
+  font-size: 12px !important;
+}
+
+.dt20-caption span {
+  color: #b8c7d9 !important;
+  font-size: 10px !important;
+}
+
+.dt20-waiting {
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 8px !important;
+  padding: 22px !important;
+  text-align: center !important;
+  color: #c5d2e2 !important;
+  background:
+    radial-gradient(
+      circle at center,
+      #17304d,
+      #07111f 70%
+    ) !important;
+}
+
+.dt20-waiting span {
+  max-width: 500px !important;
+  color: #94a7be !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.dt20-faculty-controls,
+.dt20-viewer-controls {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 10 !important;
+  min-height: 62px !important;
+  padding: 7px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  border-top:
+    1px solid rgba(255, 255, 255, 0.09) !important;
+  background: #0b1728 !important;
+  transform: none !important;
+}
+
+.dt20-faculty-controls .lk-control-bar {
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  padding: 4px !important;
+  border: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.dt20-share-control {
+  display: grid !important;
+  gap: 4px !important;
+}
+
+.dt20-share-control button,
+.dt20-viewer-controls button {
+  min-height: 42px !important;
+  padding: 0 14px !important;
+  border:
+    1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  color: #fff !important;
+  background: #126fc6 !important;
+  font: inherit !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+}
+
+.dt20-share-control button.active {
+  background: #8f2b45 !important;
+}
+
+.dt20-share-error {
+  max-width: 320px !important;
+  color: #ffbdc8 !important;
+  font-size: 10px !important;
+}
+
+.dt20-viewer-controls {
+  justify-content: space-between !important;
+}
+
+.dt20-viewer-controls > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+}
+
+/* Old floating and overlay elements must never render over Update 020. */
+.dt20-room .dt-floating-faculty,
+.dt20-room .dtm-floating-faculty,
+.dt20-room .dtm-faculty-overlay,
+.dt20-room .dt-faculty-pip,
+.dt20-room .dt-overlay-anchor,
+.dt20-room .dtm-overlay-anchor,
+.dt20-room [class*="floating-faculty"],
+.dt20-room [class*="faculty-overlay"] {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .dt20-shell {
+    height: min(74vh, 730px) !important;
+    min-height: 480px !important;
+  }
+
+  .dt20-split-layout {
+    grid-template-columns:
+      minmax(0, 1fr) 220px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .dt20-status {
+    min-height: 44px !important;
+    padding: 0 10px !important;
+    gap: 9px !important;
+    font-size: 10px !important;
+  }
+
+  .dt20-status > span:last-child {
+    display: none !important;
+  }
+
+  .dt20-split-layout {
+    padding: 7px !important;
+    grid-template-columns:
+      minmax(0, 1fr) !important;
+    grid-template-rows:
+      minmax(0, 1fr) 150px !important;
+    gap: 7px !important;
+  }
+
+  .dt20-faculty-controls {
+    min-height: 56px !important;
+    padding: 5px 7px !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+  }
+}

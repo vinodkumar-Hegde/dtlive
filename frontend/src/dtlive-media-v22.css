@@ -1,0 +1,799 @@
+/* UPDATE 022 — EXPLICIT VIDEO / SCREEN / BOTH */
+
+.dt22-panel {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid #d7e2ed !important;
+  border-radius: 16px !important;
+  color: #183650 !important;
+  background: #ffffff !important;
+  box-shadow: 0 16px 40px rgba(18, 51, 78, 0.08) !important;
+}
+
+.dt22-header {
+  min-height: 66px !important;
+  padding: 10px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  border-bottom: 1px solid #dde7f0 !important;
+  color: #183650 !important;
+  background: #ffffff !important;
+}
+
+.dt22-header-identity {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.dt22-header-icon {
+  width: 38px !important;
+  height: 38px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  border-radius: 11px !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #1269ae, #2892da) !important;
+}
+
+.dt22-header-identity > div:last-child {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 1px !important;
+}
+
+.dt22-header-identity span {
+  color: #2672ad !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.12em !important;
+}
+
+.dt22-header-identity strong {
+  overflow: hidden !important;
+  color: #183650 !important;
+  font-size: 14px !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.dt22-header-identity small {
+  color: #7890a8 !important;
+  font-size: 10px !important;
+}
+
+.dt22-collapse-button {
+  width: 36px !important;
+  height: 36px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  border: 1px solid #d5e1ed !important;
+  border-radius: 10px !important;
+  color: #285b84 !important;
+  background: #f8fbfe !important;
+}
+
+.dt22-entry-workspace {
+  padding: 16px !important;
+  display: grid !important;
+  gap: 14px !important;
+  color: #183650 !important;
+  background: #f5f8fc !important;
+}
+
+.dt22-mode-selector {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.dt22-mode-selector button {
+  min-width: 0 !important;
+  min-height: 78px !important;
+  padding: 13px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  border: 1px solid #d5e2ee !important;
+  border-radius: 13px !important;
+  color: #335571 !important;
+  background: #ffffff !important;
+  text-align: left !important;
+}
+
+.dt22-mode-selector button.selected {
+  border-color: #2187cf !important;
+  color: #145e94 !important;
+  background: #edf7ff !important;
+  box-shadow: inset 0 0 0 1px #2187cf !important;
+}
+
+.dt22-mode-selector button > span {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 3px !important;
+}
+
+.dt22-mode-selector strong {
+  color: inherit !important;
+  font-size: 12px !important;
+}
+
+.dt22-mode-selector small {
+  color: #7890a8 !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.dt22-mode-selector.compact {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  gap: 5px !important;
+}
+
+.dt22-mode-selector.compact button {
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  border-radius: 9px !important;
+  color: #c7d5e4 !important;
+  background: #13253a !important;
+}
+
+.dt22-mode-selector.compact button.selected {
+  border-color: #369be2 !important;
+  color: #ffffff !important;
+  background: #1677bd !important;
+  box-shadow: none !important;
+}
+
+.dt22-mode-selector.compact strong {
+  font-size: 10px !important;
+  white-space: nowrap !important;
+}
+
+.dt22-entry-preview {
+  min-width: 0 !important;
+  height: min(52vh, 520px) !important;
+  min-height: 340px !important;
+  overflow: hidden !important;
+  border: 1px solid #ccd9e6 !important;
+  border-radius: 15px !important;
+  background: #ffffff !important;
+}
+
+.dt22-entry-preview.mode-video,
+.dt22-entry-preview.mode-screen {
+  display: grid !important;
+  place-items: center !important;
+}
+
+.dt22-entry-preview.mode-both {
+  padding: 12px !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) 126px !important;
+  gap: 10px !important;
+}
+
+.dt22-preview-video,
+.dt22-preview-screen,
+.dt22-preview-camera {
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 8px !important;
+  padding: 20px !important;
+  text-align: center !important;
+  color: #315a79 !important;
+  background:
+    linear-gradient(#e7edf5 1px, transparent 1px),
+    linear-gradient(90deg, #e7edf5 1px, transparent 1px),
+    #ffffff !important;
+  background-size: 28px 28px !important;
+}
+
+.dt22-preview-camera {
+  width: min(360px, 100%) !important;
+  justify-self: end !important;
+  border: 1px solid #d4e0eb !important;
+  border-radius: 12px !important;
+  background: #f7fafc !important;
+}
+
+.dt22-preview-video strong,
+.dt22-preview-screen strong,
+.dt22-preview-camera strong {
+  color: #193a59 !important;
+  font-size: 18px !important;
+}
+
+.dt22-preview-camera strong {
+  font-size: 13px !important;
+}
+
+.dt22-preview-video span,
+.dt22-preview-screen span,
+.dt22-preview-camera span {
+  color: #6c839a !important;
+  font-size: 11px !important;
+}
+
+.dt22-entry-actionbar {
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  border: 1px solid #d8e3ed !important;
+  border-radius: 13px !important;
+  background: #ffffff !important;
+}
+
+.dt22-entry-actionbar > div {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 3px !important;
+}
+
+.dt22-entry-actionbar span {
+  color: #2672ad !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.11em !important;
+}
+
+.dt22-entry-actionbar strong {
+  color: #183650 !important;
+  font-size: 14px !important;
+}
+
+.dt22-entry-actionbar small {
+  color: #738aa1 !important;
+  font-size: 10px !important;
+}
+
+.dt22-start-button {
+  min-width: 180px !important;
+  min-height: 44px !important;
+  padding: 0 17px !important;
+  border: 0 !important;
+  border-radius: 11px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #1167ab, #238bd4) !important;
+  box-shadow: 0 10px 22px rgba(25, 116, 181, 0.22) !important;
+  font: inherit !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+.dt22-entry-warning {
+  padding: 10px 12px !important;
+  border: 1px solid #efc36d !important;
+  border-radius: 10px !important;
+  color: #805c18 !important;
+  background: #fff8e8 !important;
+  font-size: 11px !important;
+}
+
+.dt22-room,
+.dt22-room > div,
+.dt22-room .lk-room-container {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.dt22-shell {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: min(78vh, 820px) !important;
+  min-height: 540px !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto !important;
+  overflow: hidden !important;
+  color: #eef6ff !important;
+  background: #071422 !important;
+}
+
+.dt22-live-topbar {
+  min-height: 52px !important;
+  padding: 7px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: #0b1728 !important;
+}
+
+.dt22-live-status {
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  color: #b9c8da !important;
+  font-size: 10px !important;
+}
+
+.dt22-live-status span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+}
+
+.dt22-live-status .dt22-live {
+  color: #ffb4c2 !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+}
+
+.dt22-stage {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #02070d !important;
+}
+
+.dt22-stage.mode-video,
+.dt22-stage.mode-screen {
+  display: block !important;
+}
+
+.dt22-stage.mode-both {
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+}
+
+.dt22-video-only-stage,
+.dt22-presentation-canvas {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #000000 !important;
+}
+
+.dt22-stage.mode-both .dt22-presentation-canvas {
+  margin: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 12px !important;
+}
+
+.dt22-video-only-media,
+.dt22-presentation-media,
+.dt22-video-only-media > div,
+.dt22-presentation-media > div,
+.dt22-video-only-media .lk-participant-media-video,
+.dt22-presentation-media .lk-participant-media-video,
+.dt22-video-only-media video,
+.dt22-presentation-media video {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: #000000 !important;
+}
+
+.dt22-video-only-media video {
+  object-fit: cover !important;
+}
+
+.dt22-presentation-media video {
+  object-fit: contain !important;
+}
+
+.dt22-video-caption,
+.dt22-canvas-label {
+  position: absolute !important;
+  z-index: 4 !important;
+  left: 10px !important;
+  bottom: 10px !important;
+  min-width: 180px !important;
+  padding: 8px 10px !important;
+  display: grid !important;
+  gap: 2px !important;
+  border-radius: 9px !important;
+  color: #ffffff !important;
+  background: rgba(4, 12, 23, 0.78) !important;
+  backdrop-filter: blur(9px) !important;
+  pointer-events: none !important;
+}
+
+.dt22-canvas-label {
+  top: 10px !important;
+  bottom: auto !important;
+}
+
+.dt22-video-caption strong,
+.dt22-canvas-label strong {
+  font-size: 11px !important;
+}
+
+.dt22-video-caption span,
+.dt22-canvas-label span {
+  color: #b8c7d9 !important;
+  font-size: 9px !important;
+}
+
+.dt22-camera-waiting,
+.dt22-screen-waiting {
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 8px !important;
+  padding: 24px !important;
+  text-align: center !important;
+  color: #c6d5e4 !important;
+  background:
+    radial-gradient(circle at center, #17304d, #07111f 70%) !important;
+}
+
+.dt22-camera-waiting span,
+.dt22-screen-waiting span {
+  max-width: 520px !important;
+  color: #91a6bb !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+.dt22-camera-dock-row {
+  min-height: 130px !important;
+  max-height: 280px !important;
+  padding: 8px 10px 10px !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: flex-end !important;
+  overflow: hidden !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: #0b1728 !important;
+}
+
+.dt22-camera-dock {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto !important;
+  overflow: hidden !important;
+  resize: both !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  border-radius: 11px !important;
+  background: #02070d !important;
+}
+
+.dt22-camera-dock.size-small {
+  width: 220px !important;
+  height: 112px !important;
+}
+
+.dt22-camera-dock.size-medium {
+  width: 320px !important;
+  height: 165px !important;
+}
+
+.dt22-camera-dock.size-large {
+  width: 470px !important;
+  height: 230px !important;
+}
+
+.dt22-camera-dock-header {
+  min-height: 37px !important;
+  padding: 5px 7px 5px 9px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  color: #edf6ff !important;
+  background: #101e30 !important;
+}
+
+.dt22-camera-dock-header > div:first-child {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 1px !important;
+}
+
+.dt22-camera-dock-header strong {
+  overflow: hidden !important;
+  font-size: 10px !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.dt22-camera-dock-header span {
+  color: #9fb2c6 !important;
+  font-size: 8px !important;
+}
+
+.dt22-camera-dock-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.dt22-camera-dock-actions button {
+  width: 27px !important;
+  height: 27px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 7px !important;
+  color: #dcecff !important;
+  background: #17293d !important;
+}
+
+.dt22-camera-dock-actions button.selected {
+  border-color: #47a7ea !important;
+  color: #ffffff !important;
+  background: #1677bd !important;
+}
+
+.dt22-camera-dock-media,
+.dt22-camera-dock-media > div,
+.dt22-camera-dock-media .lk-participant-media-video,
+.dt22-camera-dock-media video {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: #000000 !important;
+}
+
+.dt22-camera-dock-media video {
+  object-fit: cover !important;
+}
+
+.dt22-resize-note {
+  min-height: 20px !important;
+  padding: 4px 8px !important;
+  color: #7f95ab !important;
+  background: #101e30 !important;
+  font-size: 8px !important;
+  text-align: right !important;
+}
+
+.dt22-camera-dock-hidden {
+  min-height: 46px !important;
+  padding: 6px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: #0b1728 !important;
+}
+
+.dt22-camera-dock-hidden button {
+  min-height: 32px !important;
+  padding: 0 11px !important;
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  color: #dcecff !important;
+  background: #17293d !important;
+  font: inherit !important;
+  font-size: 9px !important;
+  font-weight: 750 !important;
+}
+
+.dt22-camera-off {
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 4px !important;
+  padding: 10px !important;
+  text-align: center !important;
+  color: #c7d6e5 !important;
+}
+
+.dt22-camera-off strong {
+  font-size: 10px !important;
+}
+
+.dt22-camera-off span {
+  color: #8fa5bb !important;
+  font-size: 8px !important;
+}
+
+.dt22-faculty-controls,
+.dt22-viewer-controls {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 10 !important;
+  min-height: 60px !important;
+  padding: 7px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+  background: #0b1728 !important;
+  transform: none !important;
+}
+
+.dt22-faculty-controls .lk-control-bar {
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  padding: 4px !important;
+  border: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.dt22-share-control {
+  display: grid !important;
+  gap: 3px !important;
+}
+
+.dt22-share-control button,
+.dt22-viewer-controls button {
+  min-height: 40px !important;
+  padding: 0 13px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 9px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  color: #ffffff !important;
+  background: #126fc6 !important;
+  font: inherit !important;
+  font-size: 11px !important;
+  font-weight: 750 !important;
+}
+
+.dt22-share-control button.active {
+  background: #8f2b45 !important;
+}
+
+.dt22-share-control button.attention {
+  box-shadow: 0 0 0 3px rgba(44, 148, 222, 0.2) !important;
+}
+
+.dt22-share-error {
+  max-width: 330px !important;
+  color: #ffbdc8 !important;
+  font-size: 9px !important;
+}
+
+.dt22-viewer-controls {
+  justify-content: space-between !important;
+}
+
+.dt22-viewer-controls > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+}
+
+.dt22-error {
+  margin: 10px !important;
+  padding: 11px 13px !important;
+  display: grid !important;
+  gap: 4px !important;
+  border: 1px solid #ef9dac !important;
+  border-radius: 10px !important;
+  color: #8b2437 !important;
+  background: #fff2f4 !important;
+}
+
+.dt22-error span {
+  font-size: 10px !important;
+}
+
+/* Remove every earlier floating Faculty implementation. */
+.dt22-room .dt-floating-faculty,
+.dt22-room .dtm-floating-faculty,
+.dt22-room .dtm-faculty-overlay,
+.dt22-room .dt-faculty-pip,
+.dt22-room .dt-overlay-anchor,
+.dt22-room .dtm-overlay-anchor,
+.dt22-room [class*="floating-faculty"],
+.dt22-room [class*="faculty-overlay"] {
+  display: none !important;
+}
+
+@media (max-width: 920px) {
+  .dt22-live-topbar {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .dt22-mode-selector.compact {
+    width: 100% !important;
+  }
+
+  .dt22-mode-selector.compact button {
+    flex: 1 !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .dt22-mode-selector {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .dt22-mode-selector button {
+    min-height: 60px !important;
+  }
+
+  .dt22-entry-preview {
+    min-height: 280px !important;
+  }
+
+  .dt22-entry-preview.mode-both {
+    grid-template-rows: minmax(0, 1fr) 110px !important;
+  }
+
+  .dt22-entry-actionbar {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .dt22-start-button {
+    width: 100% !important;
+  }
+
+  .dt22-live-status > span:last-child {
+    display: none !important;
+  }
+
+  .dt22-mode-selector.compact {
+    overflow-x: auto !important;
+  }
+
+  .dt22-mode-selector.compact button {
+    flex: 0 0 auto !important;
+  }
+
+  .dt22-camera-dock-row {
+    max-height: 240px !important;
+  }
+
+  .dt22-camera-dock.size-small,
+  .dt22-camera-dock.size-medium,
+  .dt22-camera-dock.size-large {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .dt22-faculty-controls {
+    min-height: 56px !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+  }
+}

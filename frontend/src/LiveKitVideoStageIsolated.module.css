@@ -1,0 +1,750 @@
+.panel {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #d7e2ed;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(18, 51, 78, 0.08);
+}
+
+.header {
+  min-height: 64px;
+  padding: 11px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #dde7f0;
+  color: #183650;
+  background: #ffffff;
+}
+
+.header > div {
+  display: grid;
+  gap: 2px;
+}
+
+.header strong {
+  font-size: 14px;
+}
+
+.header span {
+  color: #7890a8;
+  font-size: 10px;
+}
+
+.preJoin {
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+  background: #f5f8fc;
+}
+
+.modeSelector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.modeSelector button,
+.modeCompact button {
+  min-width: 0;
+  border: 1px solid #d5e2ee;
+  border-radius: 13px;
+  color: #335571;
+  background: #ffffff;
+}
+
+.modeSelector button {
+  min-height: 76px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.modeSelector button > span,
+.modeCompact button > span {
+  display: grid;
+  gap: 2px;
+}
+
+.modeSelector strong,
+.modeCompact strong {
+  font-size: 11px;
+}
+
+.modeSelector small {
+  color: #7890a8;
+  font-size: 9px;
+}
+
+.modeCompact {
+  display: flex;
+  gap: 5px;
+}
+
+.modeCompact button {
+  min-height: 35px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-color: rgba(255, 255, 255, 0.13);
+  color: #c7d5e4;
+  background: #13253a;
+}
+
+.modeActive {
+  border-color: #2187cf !important;
+  color: #145e94 !important;
+  background: #edf7ff !important;
+  box-shadow: inset 0 0 0 1px #2187cf;
+}
+
+.modeCompact .modeActive {
+  color: #ffffff !important;
+  background: #1677bd !important;
+  box-shadow: none;
+}
+
+.preview {
+  position: relative;
+  height: min(58vh, 610px);
+  min-height: 410px;
+  overflow: hidden;
+  border: 1px solid #ccd9e6;
+  border-radius: 15px;
+  background: #ffffff;
+}
+
+.previewVideo,
+.previewScreen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  color: #315a79;
+  background:
+    linear-gradient(#e7edf5 1px, transparent 1px),
+    linear-gradient(90deg, #e7edf5 1px, transparent 1px),
+    #ffffff;
+  background-size: 28px 28px;
+}
+
+.previewVideo strong,
+.previewScreen > strong {
+  color: #193a59;
+  font-size: 18px;
+}
+
+.previewVideo span,
+.previewScreen > span {
+  color: #6c839a;
+  font-size: 11px;
+}
+
+.previewOverlay {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 280px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  border: 1px solid #b9cad9;
+  border-radius: 14px;
+  color: #315a79;
+  background: rgba(249, 252, 255, 0.96);
+  box-shadow: 0 14px 34px rgba(26, 58, 86, 0.16);
+}
+
+.previewOverlay strong {
+  color: #193a59;
+  font-size: 12px;
+}
+
+.previewOverlay span {
+  color: #6c839a;
+  font-size: 9px;
+}
+
+.preJoinAction {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid #d8e3ed;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.preJoinAction > div {
+  display: grid;
+  gap: 3px;
+}
+
+.preJoinAction strong {
+  color: #183650;
+  font-size: 13px;
+}
+
+.preJoinAction span {
+  color: #738aa1;
+  font-size: 10px;
+}
+
+.preJoinAction button {
+  min-width: 190px;
+  min-height: 46px;
+  border: 0;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1167ab, #238bd4);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.room,
+.room > div,
+.room :global(.lk-room-container) {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.liveShell {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 128px);
+  min-height: 680px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  color: #eef6ff;
+  background: #02070d;
+}
+
+.liveToolbar {
+  position: relative;
+  z-index: 30;
+  min-height: 58px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0b1728;
+}
+
+.liveStatus {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #b9c8da;
+  font-size: 10px;
+}
+
+.liveStatus span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.liveIndicator {
+  color: #ffb4c2;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.facultyActions {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.shareAction,
+.shareActionCompact {
+  display: grid;
+  gap: 3px;
+}
+
+.shareAction button,
+.shareActionCompact button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #ffffff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.shareStart {
+  background: #1377bd;
+  box-shadow: 0 0 0 3px rgba(38, 145, 221, 0.18);
+}
+
+.shareStop {
+  background: #982f49;
+}
+
+.shareAction span,
+.shareActionCompact span {
+  max-width: 360px;
+  color: #ffbdc8;
+  font-size: 9px;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #000000;
+}
+
+.videoOnly {
+  width: 100%;
+  height: 100%;
+  padding: 14px;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  background: radial-gradient(circle, #12304d, #02070d 72%);
+}
+
+.screenWithOverlay {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #000000;
+}
+
+.screenCanvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #000000;
+}
+
+.screenMedia,
+.screenMedia > div,
+.screenMedia :global(.lk-participant-media-video),
+.screenMedia video {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: block !important;
+  object-fit: contain !important;
+  background: #000000;
+}
+
+.screenWaiting {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 9px;
+  text-align: center;
+  color: #d4e2ef;
+  background:
+    radial-gradient(circle, rgba(31, 82, 124, 0.42), transparent 55%),
+    #030a12;
+}
+
+.screenWaiting strong {
+  font-size: 22px;
+}
+
+.screenWaiting > span {
+  max-width: 560px;
+  color: #93a9bd;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.squareCamera,
+.squareCameraOverlay {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  background: #000000;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+}
+
+.squareCamera {
+  width: min(
+    var(--faculty-video-size),
+    74vh,
+    calc(100vw - 100px)
+  );
+  height: min(
+    var(--faculty-video-size),
+    74vh,
+    calc(100vw - 100px)
+  );
+  min-width: 340px;
+  min-height: 340px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.squareCameraOverlay {
+  position: absolute;
+  z-index: 20;
+  right: 18px;
+  bottom: 18px;
+  width: min(
+    var(--faculty-video-size),
+    46vh,
+    calc(100vw - 44px)
+  );
+  height: min(
+    var(--faculty-video-size),
+    46vh,
+    calc(100vw - 44px)
+  );
+  min-width: 220px;
+  min-height: 220px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.squareCamera > header,
+.squareCameraOverlay > header {
+  min-height: 42px;
+  padding: 6px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #eef7ff;
+  background: rgba(10, 27, 45, 0.96);
+}
+
+.squareCamera > header > div,
+.squareCameraOverlay > header > div {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.squareCamera > header strong,
+.squareCameraOverlay > header strong {
+  overflow: hidden;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.squareCamera > header span,
+.squareCameraOverlay > header span {
+  color: #9eb3c8;
+  font-size: 8px;
+}
+
+.squareCameraOverlay > header button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: #e8f3fe;
+  background: #18314b;
+}
+
+.cameraMedia,
+.cameraMedia > div,
+.cameraMedia :global(.lk-participant-media-video),
+.cameraMedia video {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: block !important;
+  object-fit: cover !important;
+  background: #000000;
+}
+
+.squareCamera > footer,
+.squareCameraOverlay > footer {
+  min-height: 42px;
+  padding: 5px 8px;
+  display: grid;
+  grid-template-columns: auto minmax(100px, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  background: rgba(10, 27, 45, 0.96);
+}
+
+.squareCamera > footer button,
+.squareCameraOverlay > footer button {
+  width: 29px;
+  height: 29px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #e3f0fd;
+  background: #172c43;
+}
+
+.squareCamera > footer input,
+.squareCameraOverlay > footer input {
+  width: 100%;
+  accent-color: #2b97df;
+}
+
+.mediaWaiting {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  padding: 18px;
+  text-align: center;
+  color: #c6d5e4;
+  background: radial-gradient(circle, #17304d, #07111f 70%);
+}
+
+.mediaWaiting span {
+  max-width: 340px;
+  color: #91a6bb;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.restoreCamera {
+  position: absolute;
+  z-index: 21;
+  right: 18px;
+  bottom: 18px;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #ffffff;
+  background: rgba(13, 40, 64, 0.94);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.facultyDock,
+.viewerDock {
+  position: relative;
+  z-index: 40;
+  min-height: 68px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0b1728;
+}
+
+.facultyDock button,
+.facultyDock :global(.lk-disconnect-button),
+.viewerDock button {
+  min-width: 92px;
+  min-height: 46px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+  color: #ffffff;
+  font: inherit;
+}
+
+.facultyDock button span,
+.facultyDock :global(.lk-disconnect-button) span {
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.controlActive {
+  background: #173b5b;
+}
+
+.controlMuted {
+  background: #783046;
+}
+
+.controlShare {
+  background: #1377bd;
+  box-shadow: 0 0 0 3px rgba(31, 137, 213, 0.18);
+}
+
+.controlDanger {
+  background: #982f49;
+}
+
+.controlNeutral {
+  background: #274258;
+}
+
+.leaveButton,
+.facultyDock :global(.lk-disconnect-button) {
+  background: #832e42 !important;
+}
+
+.viewerDock {
+  justify-content: space-between;
+}
+
+.viewerDock > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.error {
+  margin: 10px;
+  padding: 11px 13px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid #ef9dac;
+  border-radius: 10px;
+  color: #8b2437;
+  background: #fff2f4;
+}
+
+.error span {
+  font-size: 10px;
+}
+
+@media (max-width: 980px) {
+  .liveToolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .facultyActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .liveShell {
+    height: calc(100vh - 110px);
+    min-height: 620px;
+  }
+}
+
+@media (max-width: 760px) {
+  .modeSelector {
+    grid-template-columns: 1fr;
+  }
+
+  .preview {
+    min-height: 330px;
+  }
+
+  .previewOverlay {
+    right: 12px;
+    bottom: 12px;
+    width: 180px;
+  }
+
+  .preJoinAction {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .preJoinAction button {
+    width: 100%;
+  }
+
+  .facultyActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .modeCompact {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .shareActionCompact button {
+    width: 100%;
+  }
+
+  .liveShell {
+    height: calc(100vh - 84px);
+    min-height: 580px;
+  }
+
+  .liveStatus {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .squareCamera {
+    min-width: 280px;
+    min-height: 280px;
+  }
+
+  .squareCameraOverlay {
+    right: 10px;
+    bottom: 10px;
+    min-width: 180px;
+    min-height: 180px;
+  }
+
+  .facultyDock {
+    justify-content: flex-start;
+  }
+
+  .facultyDock button,
+  .facultyDock :global(.lk-disconnect-button) {
+    min-width: 82px;
+  }
+}

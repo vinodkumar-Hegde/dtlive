@@ -72,3 +72,6 @@ turn-certs/
 *.tar.gz
 *.dmg
 *.apk
+
+# Local workbook PDFs
+backend/storage/workbooks/

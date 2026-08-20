@@ -1,3 +1,4 @@
+import WorkbookPdfUploader from "./WorkbookPdfUploader";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   BookOpen,
@@ -327,6 +328,25 @@ export default function SessionSetupModal({
                 Add workbook
               </button>
             </div>
+
+            <WorkbookPdfUploader
+              roomId={initial?.room_id}
+              onUploaded={(uploaded) => {
+                setForm((current) => ({
+                  ...current,
+                  workbooks: [
+                    ...current.workbooks.filter(
+                      (item) => item.title || item.url || item.description
+                    ),
+                    {
+                      title: uploaded.title,
+                      url: uploaded.file_url,
+                      description: `${uploaded.page_count} pages · PDF processed for live AI`,
+                    },
+                  ],
+                }));
+              }}
+            />
 
             <div className="workbook-builder">
               {form.workbooks.map((workbook, index) => (

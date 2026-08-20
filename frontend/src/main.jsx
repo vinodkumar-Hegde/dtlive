@@ -44,15 +44,59 @@ import {
   X,
 } from "lucide-react";
 
-import LiveKitVideoStage from "./LiveKitVideoStage";
+import LiveKitVideoStage from "./LiveKitVideoStageIsolated";
 import SessionSetupModal from "./SessionSetupModal";
 import SessionTimer from "./SessionTimer";
+import StudentChatModes from "./StudentChatModes";
 import "./styles.css";
 import "./genz-classroom.css";
+import "./dtlive-media-clean.css";
+import "./dtlive-ai-clean.css";
+
+
+/* DT_UPDATE_014_THEME_HELPER */
+const DT_CLASSROOM_THEMES = new Set([
+  "snow",
+  "mint",
+  "sand",
+  "lavender",
+]);
+
+function applyDtClassroomTheme(themeName) {
+  if (typeof window === "undefined") return;
+
+  const selected = DT_CLASSROOM_THEMES.has(themeName)
+    ? themeName
+    : "snow";
+
+  document.documentElement.dataset.dtClassroomTheme = selected;
+
+  try {
+    window.localStorage.setItem(
+      "dt-classroom-theme",
+      selected
+    );
+  } catch {
+    // Theme persistence is optional.
+  }
+}
+
+if (typeof window !== "undefined") {
+  let savedTheme = "snow";
+
+  try {
+    savedTheme =
+      window.localStorage.getItem("dt-classroom-theme") ||
+      "snow";
+  } catch {
+    savedTheme = "snow";
+  }
+
+  applyDtClassroomTheme(savedTheme);
+}
 
 const API_URL = "";
-const WS_URL =
-  `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
+const WS_URL = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
 
 async function api(path, options = {}, token = "") {
   const response = await fetch(`${API_URL}${path}`, {
@@ -977,7 +1021,8 @@ function App() {
             onClick={() => setResourcesVisible(false)}
           />
         )}
-        <aside className="med-resource-rail">
+        
+<aside className="med-resource-rail">
           <header className="med-panel-header">
             <div className="med-panel-title">
               <div className="med-panel-icon">
@@ -1112,6 +1157,65 @@ function App() {
         </aside>
 
         <section className="med-stage-column">
+        {/* DT_UPDATE_014_STUDENT_THEME_PICKER */}
+        {session.user.role === "student" && (
+          <div
+            className="dt-student-theme-picker"
+            role="group"
+            aria-label="Choose a light classroom theme"
+          >
+            <span className="dt-theme-picker-label">
+              Theme
+            </span>
+
+            <button
+              type="button"
+              className="dt-theme-option dt-theme-snow"
+              data-theme="snow"
+              onClick={() => applyDtClassroomTheme("snow")}
+              title="Snow theme"
+              aria-label="Use Snow classroom theme"
+            >
+              <i aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              className="dt-theme-option dt-theme-mint"
+              data-theme="mint"
+              onClick={() => applyDtClassroomTheme("mint")}
+              title="Mint theme"
+              aria-label="Use Mint classroom theme"
+            >
+              <i aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              className="dt-theme-option dt-theme-sand"
+              data-theme="sand"
+              onClick={() => applyDtClassroomTheme("sand")}
+              title="Warm Sand theme"
+              aria-label="Use Warm Sand classroom theme"
+            >
+              <i aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              className="dt-theme-option dt-theme-lavender"
+              data-theme="lavender"
+              onClick={() =>
+                applyDtClassroomTheme("lavender")
+              }
+              title="Lavender theme"
+              aria-label="Use Lavender classroom theme"
+            >
+              <i aria-hidden="true" />
+            </button>
+          </div>
+        )}
+
           <div className="med-stage-context">
             <div>
               <strong>
@@ -1221,6 +1325,10 @@ function App() {
         </section>
 
         <aside className="med-chat-column">
+          <StudentChatModes
+            session={session}
+            roomId={activeRoom?.id}
+          />
           <header className="med-chat-header">
             <div className="med-chat-title">
               <div className="med-chat-title-icon">
