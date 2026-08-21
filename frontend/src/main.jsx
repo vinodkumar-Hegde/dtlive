@@ -519,6 +519,12 @@ function App() {
   const [replyTo, setReplyTo] = useState(null);
   const [editing, setEditing] = useState(null);
   const [onlineCount, setOnlineCount] = useState(0);
+  const [studentPresence, setStudentPresence] = useState({
+    online_count: 0,
+    student_count: 0,
+    students: [],
+  });
+  const [studentsOpen, setStudentsOpen] = useState(true);
   const [typingUsers, setTypingUsers] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [searching, setSearching] = useState(false);
@@ -646,6 +652,21 @@ function App() {
 
       if (data.type === "presence") {
         setOnlineCount(data.online_count);
+
+        if (session.user.role === "faculty") {
+          api(
+            `/api/rooms/${activeRoomId}/presence`,
+            {},
+            session.token
+          )
+            .then(setStudentPresence)
+            .catch((err) =>
+              console.error(
+                "Presence refresh failed",
+                err
+              )
+            );
+        }
       }
 
       if (data.type === "typing" && data.user.id !== session.user.id) {
@@ -669,6 +690,53 @@ function App() {
     };
 
     return () => socket.close();
+  }, [activeRoomId, session]);
+
+  useEffect(() => {
+    if (
+      !session ||
+      !activeRoomId ||
+      session.user.role !== "faculty"
+    ) {
+      setStudentPresence({
+        online_count: 0,
+        student_count: 0,
+        students: [],
+      });
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadPresence = async () => {
+      try {
+        const data = await api(
+          `/api/rooms/${activeRoomId}/presence`,
+          {},
+          session.token
+        );
+
+        if (!cancelled) {
+          setStudentPresence(data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error("Presence fetch failed", err);
+        }
+      }
+    };
+
+    loadPresence();
+
+    const timer = window.setInterval(
+      loadPresence,
+      15000
+    );
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
   }, [activeRoomId, session]);
 
   useEffect(() => {
@@ -1065,7 +1133,13 @@ function App() {
               </button>
             </div>
           )}
-          <span className="med-online">{onlineCount} online</span>
+          <span className="med-online">
+            {isFaculty
+              ? `${studentPresence.student_count} student${
+                  studentPresence.student_count === 1 ? "" : "s"
+                } online`
+              : `${onlineCount} online`}
+          </span>
 
           <div className="med-profile-chip">
             <div className="med-profile-avatar">
@@ -1161,6 +1235,107 @@ function App() {
               </div>
             </div>
           </header>
+
+          {isFaculty && (
+            <section className="med-live-students">
+              <button
+                type="button"
+                className="med-live-students-header"
+                onClick={() =>
+                  setStudentsOpen((current) => !current)
+                }
+                aria-expanded={studentsOpen}
+              >
+                <div className="med-live-students-title">
+                  <div className="med-live-students-icon">
+                    <Users size={18} />
+                  </div>
+
+                  <div>
+                    <strong>Live students</strong>
+                    <span>
+                      {studentPresence.student_count}
+                      {" "}
+                      currently connected
+                    </span>
+                  </div>
+                </div>
+
+                <div className="med-live-students-count">
+                  <b>
+                    {studentPresence.student_count}
+                  </b>
+                  <ChevronDown
+                    size={16}
+                    className={
+                      studentsOpen
+                        ? "expanded"
+                        : ""
+                    }
+                  />
+                </div>
+              </button>
+
+              {studentsOpen && (
+                <div className="med-live-students-body">
+                  {studentPresence.students.length ? (
+                    studentPresence.students.map(
+                      (student) => (
+                        <article
+                          className="med-live-student"
+                          key={student.id}
+                        >
+                          <div className="med-live-student-avatar">
+                            {initials(student.name)}
+                            <i aria-hidden="true" />
+                          </div>
+
+                          <div className="med-live-student-copy">
+                            <strong>
+                              {student.name}
+                            </strong>
+                            <span>
+                              Joined{" "}
+                              {student.joined_at
+                                ? new Date(
+                                    student.joined_at
+                                  ).toLocaleTimeString(
+                                    [],
+                                    {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    }
+                                  )
+                                : "now"}
+                            </span>
+                          </div>
+
+                          {student.connections > 1 && (
+                            <span className="med-live-student-devices">
+                              {student.connections}
+                              {" "}
+                              connections
+                            </span>
+                          )}
+                        </article>
+                      )
+                    )
+                  ) : (
+                    <div className="med-live-students-empty">
+                      <Users size={22} />
+                      <strong>
+                        No students online
+                      </strong>
+                      <span>
+                        Students will appear here
+                        as they join the classroom.
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+          )}
 
           {!sessionConfigured ? (
             <div className="med-session-empty">

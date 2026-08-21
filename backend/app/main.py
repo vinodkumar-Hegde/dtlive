@@ -31,8 +31,9 @@ from .workbook_router import router as workbook_router
 from .realtime import (
     enforce_slow_mode,
     manager,
-    presence_decrement,
-    presence_increment,
+    presence_join,
+    presence_leave,
+    presence_snapshot,
     publish,
     start_realtime,
     stop_realtime,
@@ -749,6 +750,30 @@ async def update_slow_mode(
     return {"id": room.id, "slow_mode_seconds": room.slow_mode_seconds}
 
 
+@app.get("/api/rooms/{room_id}/presence")
+async def get_room_presence(
+    room_id: int,
+    user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_moderator(user)
+
+    room = db.get(models.ChatRoom, room_id)
+
+    if not room:
+        raise HTTPException(
+            status_code=404,
+            detail="Room not found",
+        )
+
+    snapshot = await presence_snapshot(room_id)
+
+    return {
+        "room_id": room_id,
+        **snapshot,
+    }
+
+
 @app.websocket("/ws/rooms/{room_id}")
 async def room_socket(
     websocket: WebSocket,
@@ -756,46 +781,86 @@ async def room_socket(
     user: models.User = Depends(get_ws_user),
 ):
     await manager.connect(room_id, websocket)
-    online_count = await presence_increment(room_id)
+
+    snapshot = await presence_join(
+        room_id,
+        user.id,
+        user.name,
+        user.role,
+    )
+
     await publish(
         room_id,
         {
             "type": "presence",
             "room_id": room_id,
-            "online_count": online_count,
-            "user": {"id": user.id, "name": user.name},
+            "online_count": snapshot["online_count"],
+            "student_count": snapshot["student_count"],
+            "user": {
+                "id": user.id,
+                "name": user.name,
+                "role": user.role,
+            },
+            "action": "joined",
         },
     )
+
     try:
         while True:
             data = await websocket.receive_json()
             event_type = data.get("type")
+
             if event_type == "typing":
                 await publish(
                     room_id,
                     {
                         "type": "typing",
                         "room_id": room_id,
-                        "is_typing": bool(data.get("is_typing")),
-                        "user": {"id": user.id, "name": user.name},
+                        "is_typing": bool(
+                            data.get("is_typing")
+                        ),
+                        "user": {
+                            "id": user.id,
+                            "name": user.name,
+                        },
                     },
                 )
+
             elif event_type == "ping":
-                await websocket.send_json({"type": "pong"})
+                await websocket.send_json(
+                    {"type": "pong"}
+                )
+
     except WebSocketDisconnect:
         pass
+
     finally:
-        await manager.disconnect(room_id, websocket)
-        online_count = await presence_decrement(room_id)
+        await manager.disconnect(
+            room_id,
+            websocket,
+        )
+
+        snapshot = await presence_leave(
+            room_id,
+            user.id,
+        )
+
         await publish(
             room_id,
             {
                 "type": "presence",
                 "room_id": room_id,
-                "online_count": online_count,
-                "user": {"id": user.id, "name": user.name},
+                "online_count": snapshot["online_count"],
+                "student_count": snapshot["student_count"],
+                "user": {
+                    "id": user.id,
+                    "name": user.name,
+                    "role": user.role,
+                },
+                "action": "left",
             },
         )
+
 
 @app.post("/api/livekit/token")
 def create_livekit_token(

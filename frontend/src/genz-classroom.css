@@ -3852,3 +3852,189 @@ html[data-dt-classroom-theme="lavender"]
     white-space: nowrap;
   }
 }
+
+/* DT V3 FACULTY LIVE STUDENT PRESENCE */
+
+.med-live-students {
+  margin: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  overflow: hidden;
+}
+
+.med-live-students-header {
+  width: 100%;
+  min-height: 68px;
+  padding: 12px 14px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.med-live-students-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.med-live-students-icon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.med-live-students-title > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.med-live-students-title strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.med-live-students-title span {
+  font-size: 11px;
+  opacity: 0.65;
+}
+
+.med-live-students-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.med-live-students-count b {
+  min-width: 29px;
+  height: 29px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.med-live-students-count svg {
+  transition: transform 160ms ease;
+}
+
+.med-live-students-count svg.expanded {
+  transform: rotate(180deg);
+}
+
+.med-live-students-body {
+  max-height: 310px;
+  overflow-y: auto;
+  padding: 3px 10px 10px;
+  border-top: 1px solid rgba(15, 23, 42, 0.07);
+}
+
+.med-live-student {
+  min-height: 57px;
+  padding: 8px 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.med-live-student:last-child {
+  border-bottom: 0;
+}
+
+.med-live-student-avatar {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(37, 99, 235, 0.09);
+}
+
+.med-live-student-avatar i {
+  position: absolute;
+  right: -1px;
+  bottom: 1px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.med-live-student-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.med-live-student-copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.med-live-student-copy span {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.med-live-student-devices {
+  flex: 0 0 auto;
+  font-size: 9px;
+  padding: 4px 6px;
+  border-radius: 7px;
+  background: rgba(15, 23, 42, 0.05);
+}
+
+.med-live-students-empty {
+  min-height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+  opacity: 0.65;
+}
+
+.med-live-students-empty strong {
+  font-size: 12px;
+}
+
+.med-live-students-empty span {
+  max-width: 190px;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .med-live-students {
+    margin: 8px;
+  }
+
+  .med-live-students-body {
+    max-height: 220px;
+  }
+}
