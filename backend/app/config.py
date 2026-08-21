@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     zoom_video_sdk_key: str = ""
     zoom_video_sdk_secret: str = ""
     zoom_video_session_password: str = ""
+    faculty_email: str = "faculty@doctutorials.com"
+    faculty_password: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

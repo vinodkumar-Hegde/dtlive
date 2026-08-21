@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hmac
 
 import json
 
@@ -195,30 +196,122 @@ def health():
     return {"status": "ok", "service": "doctutorials-live-chat"}
 
 
-@app.post("/api/auth/demo-login")
-def demo_login(payload: schemas.DemoLoginIn, db: Session = Depends(get_db)):
-    allowed_roles = {"student", "faculty", "moderator", "admin"}
-    role = payload.role.lower()
-    if role not in allowed_roles:
-        raise HTTPException(status_code=400, detail="Unsupported role")
+def _login_response(user: models.User) -> dict:
+    return {
+        "access_token": create_access_token(user),
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "role": user.role,
+        },
+    }
+
+
+@app.post("/api/auth/student-login")
+def student_login(
+    payload: schemas.StudentLoginIn,
+    db: Session = Depends(get_db),
+):
+    name = payload.name.strip()
+
+    if name.lower() == settings.faculty_email.strip().lower():
+        raise HTTPException(
+            status_code=400,
+            detail="Use Faculty Login for this account",
+        )
+
     user = db.scalars(
         select(models.User)
         .where(
-            func.lower(models.User.name) == payload.name.strip().lower(),
-            models.User.role == role,
+            func.lower(models.User.name) == name.lower(),
+            models.User.role == "student",
         )
         .order_by(models.User.id.asc())
         .limit(1)
     ).first()
+
     if not user:
-        user = models.User(name=payload.name.strip(), role=role)
+        user = models.User(
+            name=name,
+            role="student",
+        )
         db.add(user)
         db.commit()
         db.refresh(user)
-    return {
-        "access_token": create_access_token(user),
-        "user": {"id": user.id, "name": user.name, "role": user.role},
-    }
+
+    return _login_response(user)
+
+
+@app.post("/api/auth/faculty-login")
+def faculty_login(
+    payload: schemas.FacultyLoginIn,
+    db: Session = Depends(get_db),
+):
+    configured_email = settings.faculty_email.strip().lower()
+    configured_password = settings.faculty_password
+
+    if not configured_password:
+        raise HTTPException(
+            status_code=503,
+            detail="Faculty authentication is not configured",
+        )
+
+    supplied_email = payload.email.strip().lower()
+
+    email_ok = hmac.compare_digest(
+        supplied_email,
+        configured_email,
+    )
+
+    password_ok = hmac.compare_digest(
+        payload.password,
+        configured_password,
+    )
+
+    if not email_ok or not password_ok:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid faculty email or password",
+        )
+
+    user = db.scalars(
+        select(models.User)
+        .where(
+            func.lower(models.User.name) == configured_email,
+            models.User.role == "faculty",
+        )
+        .order_by(models.User.id.asc())
+        .limit(1)
+    ).first()
+
+    if not user:
+        user = models.User(
+            name=configured_email,
+            role="faculty",
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    return _login_response(user)
+
+
+@app.post("/api/auth/demo-login")
+def demo_login(
+    payload: schemas.DemoLoginIn,
+    db: Session = Depends(get_db),
+):
+    # Legacy compatibility: never permit role escalation.
+    if payload.role.lower() != "student":
+        raise HTTPException(
+            status_code=403,
+            detail="Role selection has been disabled",
+        )
+
+    return student_login(
+        schemas.StudentLoginIn(name=payload.name),
+        db,
+    )
 
 
 @app.get("/api/rooms")

@@ -96,6 +96,7 @@ if (typeof window !== "undefined") {
 }
 
 const API_URL = "";
+const FACULTY_EMAIL = "faculty@doctutorials.com";
 const WS_URL = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
 
 async function api(path, options = {}, token = "") {
@@ -177,24 +178,63 @@ function playChatNotificationTone() {
 
 function Login({ onLogin }) {
   const [name, setName] = useState("");
-  const [role, setRole] = useState("student");
+  const [facultyMode, setFacultyMode] = useState(false);
+  const [facultyEmail, setFacultyEmail] = useState(FACULTY_EMAIL);
+  const [facultyPassword, setFacultyPassword] = useState("");
   const [error, setError] = useState("");
-  const [classSession, setClassSession] = useState(null);
-  const [sessionSetupOpen, setSessionSetupOpen] = useState(false);
-  const [sessionSaving, setSessionSaving] = useState(false);
-  const [mobileView, setMobileView] = useState("class");
+  const [busy, setBusy] = useState(false);
 
-  async function submit(event) {
+  async function submitStudent(event) {
     event.preventDefault();
     setError("");
+
+    const cleanName = name.trim();
+
+    if (cleanName.toLowerCase() === FACULTY_EMAIL) {
+      setFacultyEmail(cleanName);
+      setFacultyPassword("");
+      setFacultyMode(true);
+      return;
+    }
+
     try {
-      const data = await api("/api/auth/demo-login", {
+      setBusy(true);
+
+      const data = await api("/api/auth/student-login", {
         method: "POST",
-        body: JSON.stringify({ name, role }),
+        body: JSON.stringify({
+          name: cleanName,
+        }),
       });
+
       onLogin(data);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function submitFaculty(event) {
+    event.preventDefault();
+    setError("");
+
+    try {
+      setBusy(true);
+
+      const data = await api("/api/auth/faculty-login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: facultyEmail.trim(),
+          password: facultyPassword,
+        }),
+      });
+
+      onLogin(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -202,40 +242,127 @@ function Login({ onLogin }) {
     <main className="login-shell">
       <section className="login-card">
         <div className="brand-mark">DT</div>
+
         <p className="eyebrow">DOCTUTORIALS</p>
-        <h1>Live Session Chat</h1>
+
+        <h1>
+          {facultyMode
+            ? "Faculty Login"
+            : "Join Live Class"}
+        </h1>
+
         <p className="login-copy">
-          Real-time faculty interaction, moderated student discussion, and session announcements.
+          {facultyMode
+            ? "Sign in to open the DocTutorials Faculty Studio."
+            : "Enter your name to join the live medical classroom."}
         </p>
-        <form onSubmit={submit}>
-          <label>
-            Display name
-            <input
-              autoFocus
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Enter your name"
-              minLength={2}
-              required
-            />
-          </label>
-          <label>
-            Demo role
-            <select value={role} onChange={(event) => setRole(event.target.value)}>
-              <option value="student">Student</option>
-              <option value="faculty">Faculty</option>
-              <option value="moderator">Moderator</option>
-              <option value="admin">Admin</option>
-            </select>
-          </label>
-          {error && <p className="error-text">{error}</p>}
-          <button className="primary-button" type="submit">
-            Enter live chat
-          </button>
-        </form>
-        <p className="demo-note">
-          Demo authentication is included for local testing. Replace it with DocTutorials SSO before production.
-        </p>
+
+        {!facultyMode ? (
+          <form onSubmit={submitStudent}>
+            <label>
+              Student Name
+              <input
+                autoFocus
+                value={name}
+                onChange={(event) =>
+                  setName(event.target.value)
+                }
+                placeholder="Enter student name"
+                minLength={2}
+                required
+              />
+            </label>
+
+            {error && (
+              <p className="error-text">
+                {error}
+              </p>
+            )}
+
+            <button
+              className="primary-button"
+              type="submit"
+              disabled={busy}
+            >
+              {busy
+                ? "Joining..."
+                : "Join Live Class"}
+            </button>
+
+            <button
+              type="button"
+              className="login-mode-link"
+              onClick={() => {
+                setError("");
+                setFacultyEmail(FACULTY_EMAIL);
+                setFacultyPassword("");
+                setFacultyMode(true);
+              }}
+            >
+              Faculty Login
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={submitFaculty}>
+            <label>
+              Faculty Email
+              <input
+                type="email"
+                value={facultyEmail}
+                onChange={(event) =>
+                  setFacultyEmail(event.target.value)
+                }
+                placeholder="faculty@doctutorials.com"
+                autoComplete="username"
+                required
+              />
+            </label>
+
+            <label>
+              Password
+              <input
+                autoFocus
+                type="password"
+                value={facultyPassword}
+                onChange={(event) =>
+                  setFacultyPassword(event.target.value)
+                }
+                placeholder="Enter faculty password"
+                autoComplete="current-password"
+                minLength={8}
+                required
+              />
+            </label>
+
+            {error && (
+              <p className="error-text">
+                {error}
+              </p>
+            )}
+
+            <button
+              className="primary-button"
+              type="submit"
+              disabled={busy}
+            >
+              {busy
+                ? "Signing in..."
+                : "Open Faculty Studio"}
+            </button>
+
+            <button
+              type="button"
+              className="login-mode-link"
+              onClick={() => {
+                setError("");
+                setFacultyPassword("");
+                setFacultyMode(false);
+              }}
+            >
+              Back to Student Login
+            </button>
+          </form>
+        )}
       </section>
     </main>
   );

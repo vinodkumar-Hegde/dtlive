@@ -6,6 +6,15 @@ class DemoLoginIn(BaseModel):
     role: str = "student"
 
 
+class StudentLoginIn(BaseModel):
+    name: str = Field(min_length=2, max_length=120)
+
+
+class FacultyLoginIn(BaseModel):
+    email: str = Field(min_length=5, max_length=180)
+    password: str = Field(min_length=8, max_length=200)
+
+
 class RoomCreate(BaseModel):
     title: str = Field(min_length=2, max_length=180)
     description: str | None = None
