@@ -17,8 +17,17 @@ from . import models
 from .auth import get_current_user
 from .db import SessionLocal, get_db
 from .workbook_models import Workbook, WorkbookPage
+from .bedrock_provider import (
+    BEDROCK_MODEL_ID,
+    stream_from_bedrock,
+)
 
 router = APIRouter(tags=["private-ai-stream"])
+
+AI_PROVIDER = os.getenv(
+    "AI_PROVIDER",
+    "ollama",
+).strip().lower()
 
 OLLAMA_BASE_URL = os.getenv(
     "OLLAMA_BASE_URL",
@@ -416,13 +425,16 @@ def stream_private_ai_tutor(
         question,
     )
 
-    candidates = _available_candidates()
+    if AI_PROVIDER == "bedrock":
+        candidates = [BEDROCK_MODEL_ID]
+    else:
+        candidates = _available_candidates()
 
-    if not candidates:
-        raise HTTPException(
-            status_code=503,
-            detail="No responsive local academic model is installed",
-        )
+        if not candidates:
+            raise HTTPException(
+                status_code=503,
+                detail="No responsive local academic model is installed",
+            )
 
     prompt = _system_prompt(
         context,
@@ -460,11 +472,19 @@ def stream_private_ai_tutor(
             emitted = False
 
             try:
-                for chunk in _stream_from_model(
-                    model,
-                    messages,
-                    payload.quality_mode,
-                ):
+                if AI_PROVIDER == "bedrock":
+                    stream = stream_from_bedrock(
+                        messages,
+                        payload.quality_mode,
+                    )
+                else:
+                    stream = _stream_from_model(
+                        model,
+                        messages,
+                        payload.quality_mode,
+                    )
+
+                for chunk in stream:
                     emitted = True
 
                     yield _json_line(
@@ -508,7 +528,7 @@ def stream_private_ai_tutor(
             {
                 "type": "error",
                 "detail": (
-                    "All local academic models failed. "
+                    "AI Tutor provider failed. "
                     + " | ".join(failures)
                 ),
             }
@@ -526,12 +546,20 @@ def stream_private_ai_tutor(
 
 @router.get("/api/ai/tutor/stream-health")
 def stream_ai_health():
+    if AI_PROVIDER == "bedrock":
+        models_list = [BEDROCK_MODEL_ID]
+    else:
+        try:
+            models_list = _available_candidates()
+        except Exception:
+            models_list = []
+
     return {
         "status": "ok",
         "service": "fast-streaming-ai-tutor",
-        "models": _available_candidates(),
+        "provider": AI_PROVIDER,
+        "models": models_list,
         "streaming": True,
-        "interactive_27b_disabled": True,
         "context_tokens": 4096,
         "quick_output_tokens": 220,
         "detailed_output_tokens": 360,

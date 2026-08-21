@@ -8,3 +8,4 @@ PyJWT>=2.9,<3
 python-multipart>=0.0.9
 livekit-api==1.2.0
 pypdf>=5,<6
+boto3>=1.35,<2
