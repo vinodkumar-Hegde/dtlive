@@ -1661,7 +1661,7 @@ function App() {
           }}
         >
           <MonitorPlay size={17} />
-          Live
+          Watch Live
         </button>
 
         <button

@@ -13,6 +13,7 @@ import {
   VideoTrack,
   useLocalParticipant,
   useParticipants,
+  useRoomContext,
   useTracks,
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
@@ -33,6 +34,8 @@ import {
   Square,
   Users,
   Video,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import "@livekit/components-styles";
 import styles from "./LiveKitVideoStageIsolated.module.css";
@@ -635,6 +638,7 @@ function ConnectedStudio({
   onModeChange,
 }) {
   const participants = useParticipants();
+  const room = useRoomContext();
 
   const trackRefs = useTracks(
     [
@@ -691,8 +695,105 @@ function ConnectedStudio({
     setCameraOverlayVisible,
   ] = useState(true);
 
+  const [viewerAudioMuted, setViewerAudioMuted] =
+    useState(true);
+  const [isFullscreen, setIsFullscreen] =
+    useState(false);
+
+  const liveShellRef = useRef(null);
+  const audioRootRef = useRef(null);
+
+  useEffect(() => {
+    if (faculty) return;
+
+    function syncAudioElements() {
+      const audioElements =
+        audioRootRef.current?.querySelectorAll("audio") || [];
+
+      audioElements.forEach((audio) => {
+        audio.muted = viewerAudioMuted;
+
+        if (!viewerAudioMuted) {
+          audio.play().catch(() => {});
+        }
+      });
+    }
+
+    syncAudioElements();
+
+    const root = audioRootRef.current;
+
+    if (!root) return;
+
+    const observer = new MutationObserver(
+      syncAudioElements,
+    );
+
+    observer.observe(root, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, [faculty, viewerAudioMuted]);
+
+  useEffect(() => {
+    function updateFullscreenState() {
+      setIsFullscreen(
+        document.fullscreenElement === liveShellRef.current,
+      );
+    }
+
+    document.addEventListener(
+      "fullscreenchange",
+      updateFullscreenState,
+    );
+
+    return () =>
+      document.removeEventListener(
+        "fullscreenchange",
+        updateFullscreenState,
+      );
+  }, []);
+
+  async function toggleViewerAudio() {
+    if (faculty) return;
+
+    const nextMuted = !viewerAudioMuted;
+
+    if (!nextMuted) {
+      try {
+        await room?.startAudio?.();
+      } catch {
+        // The explicit student interaction below still
+        // allows browser audio elements to attempt playback.
+      }
+    }
+
+    setViewerAudioMuted(nextMuted);
+  }
+
+  async function toggleViewerFullscreen() {
+    const element = liveShellRef.current;
+
+    if (!element) return;
+
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else if (element.requestFullscreen) {
+        await element.requestFullscreen();
+      }
+    } catch {
+      // Fullscreen support varies between mobile browsers.
+    }
+  }
+
   return (
-    <div className={styles.liveShell}>
+    <div
+      ref={liveShellRef}
+      className={styles.liveShell}
+    >
       {faculty && (
         <MediaModeController mode={mode} />
       )}
@@ -787,8 +888,16 @@ function ConnectedStudio({
         )}
       </div>
 
-      <RoomAudioRenderer />
-      <StartAudio label="Enable classroom audio" />
+      <div
+        ref={audioRootRef}
+        className={styles.audioRenderer}
+      >
+        <RoomAudioRenderer />
+      </div>
+
+      {faculty && (
+        <StartAudio label="Enable classroom audio" />
+      )}
 
       {faculty ? (
         <FacultyControlDock
@@ -804,15 +913,60 @@ function ConnectedStudio({
         />
       ) : (
         <div className={styles.viewerDock}>
-          <span>
+          <span className={styles.viewerStatus}>
             <Eye size={16} />
-            View only
+            Watch only
           </span>
 
-          <DisconnectButton stopTracks>
-            <LogOut size={16} />
-            Leave
-          </DisconnectButton>
+          <div className={styles.viewerControls}>
+            <button
+              type="button"
+              className={
+                viewerAudioMuted
+                  ? styles.viewerMuted
+                  : styles.viewerActive
+              }
+              onClick={toggleViewerAudio}
+            >
+              {viewerAudioMuted ? (
+                <VolumeX size={17} />
+              ) : (
+                <Volume2 size={17} />
+              )}
+
+              <span>
+                {viewerAudioMuted
+                  ? "Unmute"
+                  : "Mute"}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.viewerControl}
+              onClick={toggleViewerFullscreen}
+            >
+              {isFullscreen ? (
+                <Minimize2 size={17} />
+              ) : (
+                <Maximize2 size={17} />
+              )}
+
+              <span>
+                {isFullscreen
+                  ? "Exit full"
+                  : "Fullscreen"}
+              </span>
+            </button>
+
+            <DisconnectButton
+              stopTracks
+              className={styles.viewerLeave}
+            >
+              <LogOut size={17} />
+              <span>Leave</span>
+            </DisconnectButton>
+          </div>
         </div>
       )}
 
@@ -829,7 +983,11 @@ function PreJoin({
   onJoin,
 }) {
   return (
-    <div className={styles.preJoin}>
+    <div
+      className={`${styles.preJoin} ${
+        faculty ? "" : styles.studentPreJoin
+      }`}
+    >
       {faculty && (
         <ModeSelector
           mode={mode}

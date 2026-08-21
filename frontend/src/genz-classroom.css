@@ -3810,3 +3810,45 @@ html[data-dt-classroom-theme="lavender"]
 }
 
 /* UPDATE 016 AI STREAM END */
+
+
+/* ========================================================
+   DT V3 MOBILE CLASSROOM NAVIGATION
+   ======================================================== */
+
+@media (max-width: 760px) {
+  .med-classroom {
+    height: 100dvh;
+    min-height: 0;
+  }
+
+  .med-workspace {
+    min-height: 0;
+    padding-bottom:
+      calc(68px + env(safe-area-inset-bottom));
+  }
+
+  .med-stage-column {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .med-mobile-nav {
+    position: fixed !important;
+    z-index: 1000 !important;
+    left: 7px !important;
+    right: 7px !important;
+    bottom:
+      max(6px, env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    display: grid !important;
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .med-mobile-nav button {
+    min-width: 0 !important;
+    font-size: 9px !important;
+    white-space: nowrap;
+  }
+}
